@@ -1,10 +1,16 @@
 import React from 'react'
+import {Route,Routes} from 'react-router-dom'
+import Home from './/pages/Home'
 
 type Props = {}
 
 const App = (props: Props) => {
   return (
-    <div>App</div>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </div>
   )
 }
 
