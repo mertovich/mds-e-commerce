@@ -90,8 +90,8 @@ const ProductList = (props: Props) => {
                     </SimpleGrid>
                     :
                     <Box
-                            textAlign={'center'}
-                            marginTop={'5%'}
+                        textAlign={'center'}
+                        marginTop={'5%'}
                     >
                         <Spinner
                             thickness='4px'
