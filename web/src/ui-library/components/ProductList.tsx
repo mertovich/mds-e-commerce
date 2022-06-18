@@ -31,9 +31,10 @@ const ProductList = (props: Props) => {
                 <InputGroup>
                     <InputLeftElement
                         pointerEvents='none'
+                        zIndex={0}
                         children={<SearchIcon color='gray.400' />}
                     />
-                    <Input type='tel' placeholder='Search' />
+                    <Input type='text' placeholder='Search' />
                 </InputGroup>
             </Stack>
             {
