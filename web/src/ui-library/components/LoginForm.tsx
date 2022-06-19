@@ -4,11 +4,11 @@ import {
     Box,
     Button,
     Text,
-    VStack,
     InputGroup,
     InputLeftElement,
     Input,
-    InputRightElement
+    InputRightElement,
+    useToast,
   } from '@chakra-ui/react'
 
 type Props = {}
@@ -21,21 +21,45 @@ const LoginForm = (props: Props) => {
     const [password, setPassword] = useState<string>('')
   
     const handleClick = () => setShow(!show)
+    const toast = useToast()
+
+    const toastMessage = (title: string, message: string) => {
+        toast({
+            title: title,
+            description: message,
+            position: 'top-right',
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        })
+    }
   
     const emailValidate = () => {
-      if (email.length <= 20 && email.includes('@') && email.includes('.') && email.length >= 5) {
-        setEmailControl(true)
-      } else {
+      if (email.length <=5) {
         setEmailControl(false)
+        toastMessage('Email', 'Email is too short')
       }
+      if(email.length > 20) {
+        setEmailControl(false)
+        toastMessage('Email', 'Email is too long')
+      }
+        if(email.length > 5 && email.length < 20) {
+            setEmailControl(true)
+        }
     }
   
     const passwordValidate = () => {
-      if (password.length >= 6 && password.length <= 20 && password !== '') {
-        setPasswordControl(true)
-      } else {
-        setPasswordControl(false)
-      }
+        if(password.length <= 5) {
+            setPasswordControl(false)
+            toastMessage('Password', 'Password is too short')
+        }
+        if(password.length > 20) {
+            setPasswordControl(false)
+            toastMessage('Password', 'Password is too long')
+        }
+        if(password.length > 5 && password.length < 20) {
+            setPasswordControl(true)
+        }
     }
   
     const loginHandler = () => {
