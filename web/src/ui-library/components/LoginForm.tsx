@@ -50,13 +50,6 @@ const LoginForm = (props: Props) => {
             width={'xl'}
             borderRadius={'10px'}
         >
-            <Text
-                color={'blue.400'}
-                fontWeight={'bold'}
-                fontSize={'2xl'}
-                padding={'2'}
-            >Login
-            </Text>
             <InputGroup
                 marginTop={'2'}
                 marginBottom={'2'}
