@@ -7,6 +7,7 @@ import {
     InputGroup,
     InputRightElement,
     Select,
+    useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 
@@ -21,10 +22,13 @@ const RegisterForm = (props: Props) => {
     const [password, setPassword] = useState<string>('')
     const [passwordConfirmation, setPasswordConfirmation] = useState<string>('')
     const [status, setStatus] = useState<string>('')
-    const [nameAndSurnameControl, setNameAndSurnameControl] = useState<boolean>(true)
+    const [nameControl, setNameControl] = useState<boolean>(true)
+    const [surnameControl, setSurnameControl] = useState<boolean>(true)
     const [passwordControl, setPasswordControl] = useState<boolean>(true)
     const [emailControl, setEmailControl] = useState<boolean>(true)
     const [statusControl, setStatusControl] = useState<boolean>(true)
+
+    const toast = useToast()
 
     const handleSubmit = () => {
         nameAndSurnameValidation()
@@ -33,32 +37,99 @@ const RegisterForm = (props: Props) => {
         statusValdiation()
     }
 
+    const toastMessage = (title: string, message: string) => {
+        toast({
+            title: title,
+            description: message,
+            position: 'top-right',
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        })
+    }
+
     const nameAndSurnameValidation = () => {
-        if (name.length > 2 && surname.length > 2 && name.length <= 15 && surname.length <= 15) {
-            setNameAndSurnameControl(true)
-        } else {
-            setNameAndSurnameControl(false)
+        if (name.length <= 2) {
+            setNameControl(false)
+            toastMessage('Name Error', 'Name must be at least 3 characters long')
+        }
+        if (surname.length <= 2) {
+            setSurnameControl(false)
+            toastMessage('Surname Error', 'Surname must be at least 3 characters long')
+        }
+        if (name.length > 15) {
+            setNameControl(false)
+            toastMessage('Name Error', 'Name must be less than 15 characters long')
+        }
+        if (surname.length > 15) {
+            setSurnameControl(false)
+            toastMessage('Surname Error', 'Surname must be less than 15 characters long')
+        }
+        if (name.length > 2 && surname.length > 2 && name.length < 15 && surname.length < 15) {
+            setNameControl(true)
+        }
+        if (name.length >= 3 && name.length <= 15) {
+            setNameControl(true)
+        }
+        if (surname.length >= 3 && surname.length <= 15) {
+            setSurnameControl(true)
         }
     }
 
     const emailValidation = () => {
-        if (email.includes('@') && email.includes('.') && email.length > 5 && email.length < 20) {
-            setEmailControl(true)
-        } else {
+        if (email.length <= 5) {
             setEmailControl(false)
+            toastMessage('Email Error', 'Email must be at least 6 characters long')
+        }
+        if (email.length > 20) {
+            setEmailControl(false)
+            toastMessage('Email Error', 'Email must be less than 20 characters long')
+        }
+        if (!email.includes('@')) {
+            setEmailControl(false)
+            toastMessage('Email Error', 'Email must contain @')
+        }
+        if (!email.includes('.')) {
+            setEmailControl(false)
+            toastMessage('Email Error', 'Email must contain .')
+        }
+        if (email.length >= 6 && email.length <= 20 && email.includes('@') && email.includes('.')) {
+            setEmailControl(true)
         }
 
     }
 
     const passwordValidation = () => {
-        if (password.length >= 6 && passwordConfirmation.length >= 6 && password === passwordConfirmation && password.length <= 20 && passwordConfirmation.length <= 20) {
-            setPasswordControl(true)
-        } else {
+        if (password.length <= 5) {
             setPasswordControl(false)
+            toastMessage('Password Error', 'Password must be at least 6 characters long')
+        }
+        if (password.length > 20) {
+            setPasswordControl(false)
+            toastMessage('Password Error', 'Password must be less than 20 characters long')
+        }
+        if (passwordConfirmation.length <= 5) {
+            setPasswordControl(false)
+            toastMessage('Password Confirmation Error', 'Password Confirmation must be at least 6 characters long')
+        }
+        if (passwordConfirmation.length > 20) {
+            setPasswordControl(false)
+            toastMessage('Password Confirmation Error', 'Password Confirmation must be less than 20 characters long')
+        }
+        if (password !== passwordConfirmation) {
+            setPasswordControl(false)
+            toastMessage('Password Confirmation Error', 'Password Confirmation must be the same as Password')
+        }
+        if (password.length >= 6 && password.length <= 20 && password.length === passwordConfirmation.length && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
+            setPasswordControl(true)
         }
     }
 
     const statusValdiation = () => {
+        if(status === ''){
+            setStatusControl(false)
+            toastMessage('Account type', 'Account type must be selected')
+        }
         if (status === 'Customer' || status === 'Company') {
             setStatusControl(true)
         } else {
@@ -75,13 +146,13 @@ const RegisterForm = (props: Props) => {
             <HStack
                 marginTop={2}>
                 <Input
-                    isInvalid={!nameAndSurnameControl}
+                    isInvalid={!nameControl}
                     onChange={(e) => setName(e.target.value)}
                     variant='outline'
                     type={'text'}
                     placeholder='Name' />
                 <Input
-                    isInvalid={!nameAndSurnameControl}
+                    isInvalid={!surnameControl}
                     onChange={(e) => setSurname(e.target.value)}
                     variant='outline'
                     placeholder='Surname' />
