@@ -6,6 +6,6 @@ import (
 )
 
 func Inıt() {
-	http.HandleFunc("/api/", handlers.Hello)
+	http.HandleFunc("/api/register", handlers.Register)
 
 }
