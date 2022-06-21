@@ -21,3 +21,15 @@ func SaveCustomer(c models.Customer) {
 	customersJson, _ := json.Marshal(customers)
 	ioutil.WriteFile(dataPathCustomers, customersJson, 0644)
 }
+
+func UpdateCustomer(c models.Customer) {
+	customers := GetCustomers()
+	for i, customer := range customers {
+		if customer.ID == c.ID {
+			customers[i] = c
+			break
+		}
+	}
+	customersJson, _ := json.Marshal(customers)
+	ioutil.WriteFile(dataPathCustomers, customersJson, 0644)
+}
