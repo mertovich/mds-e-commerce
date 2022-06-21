@@ -8,4 +8,5 @@ import (
 func Inıt() {
 	http.HandleFunc("/api/register", handlers.Register)
 	http.HandleFunc("/api/login", handlers.Login)
+	http.HandleFunc("/api/auth", handlers.Auth)
 }
