@@ -27,6 +27,25 @@ func CreateTokenCustomer(customer models.Customer) string {
 	return tokenString
 }
 
+func CreateTokenCompany(company models.Company) string {
+
+	key := []byte("secret")
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":        company.ID,
+		"name":      company.Name,
+		"surname":   company.Surname,
+		"email":     company.Email,
+		"password":  company.Password,
+		"createdAt": company.CreatedAt,
+		"exp":       time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	// Sign and get the complete encoded token as a string using the secret
+	tokenString, _ := token.SignedString(key)
+
+	return tokenString
+}
+
 func SigninToken(tk string) string {
 	key := []byte("secret")
 	tokenString := tk
