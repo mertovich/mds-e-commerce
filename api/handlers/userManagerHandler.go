@@ -89,11 +89,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	json.Unmarshal(bodyByte, &user)
 
-	token, err := datamanager.Login(user.Email, user.Password)
-	if err != nil {
-		fmt.Fprintf(w, "Error: %s", err)
-		return
-	}
+	token := datamanager.Login(user.Email, user.Password)
 
 	tokenMap := map[string]string{
 		"token": token,
@@ -101,4 +97,30 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	tokenJson, _ := json.Marshal(tokenMap)
 	fmt.Fprintf(w, string(tokenJson))
 
+}
+
+func Auth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/auth" {
+		http.NotFound(w, r)
+		return
+	}
+
+	type User struct {
+		Token string `json:"token"`
+	}
+
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	var user User
+	json.Unmarshal(bodyByte, &user)
+
+	auth := datamanager.Auth(user.Token)
+
+	authMap := map[string]bool{
+		"auth": auth,
+	}
+	authJson, _ := json.Marshal(authMap)
+	fmt.Fprintf(w, string(authJson))
 }
