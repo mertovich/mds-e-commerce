@@ -50,5 +50,23 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		}
 		tokenJson, _ := json.Marshal(tokenMap)
 		fmt.Fprintf(w, string(tokenJson))
+	} else if user.AccountType == "Company" {
+		c := models.Company{}
+		c.ID = tools.CreateId(user.AccountType)
+		c.Name = user.Name
+		c.Surname = user.Surname
+		c.Email = user.Email
+		c.Password = user.Password
+		c.CreatedAt = time.Now().String()
+		c.Products = []models.Product{}
+		c.Token = tools.CreateTokenCompany(c)
+
+		datamanager.SaveCompany(c)
+
+		tokenMap := map[string]string{
+			"token": c.Token,
+		}
+		tokenJson, _ := json.Marshal(tokenMap)
+		fmt.Fprintf(w, string(tokenJson))
 	}
 }
