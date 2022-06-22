@@ -23,12 +23,12 @@ const LoginForm = (props: Props) => {
     const handleClick = () => setShow(!show)
     const toast = useToast()
 
-    const toastMessage = (title: string, message: string) => {
+    const toastMessage = (title: string, message: string, statusType:any='error') => {
         toast({
             title: title,
             description: message,
             position: 'top-right',
-            status: 'error',
+            status: statusType,
             duration: 9000,
             isClosable: true,
         })
@@ -61,10 +61,32 @@ const LoginForm = (props: Props) => {
             setPasswordControl(true)
         }
     }
+
+    const login = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password })
+        }
+        fetch('http://localhost:8080/api/login', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if(data.token !== '') {
+                toastMessage('Success', 'Login Successful', 'success')
+                localStorage.setItem('token', data.token)
+            } else {
+                toastMessage('Error', 'Email or password is incorrect')
+            }
+        }
+        )
+    }
   
     const loginHandler = () => {
       emailValidate()
       passwordValidate()
+      if (emailControl !== false && passwordControl !== false) {
+        login()
+      }
     }
     return (
         <Box
