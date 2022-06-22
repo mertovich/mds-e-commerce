@@ -35,17 +35,44 @@ const RegisterForm = (props: Props) => {
         passwordValidation()
         emailValidation()
         statusValdiation()
+        if(nameControl && surnameControl && passwordControl && emailControl && statusControl) {
+            register()
+        }
     }
 
-    const toastMessage = (title: string, message: string) => {
+    const toastMessage = (title: string, message: string, statusType:any='error') => {
         toast({
             title: title,
             description: message,
             position: 'top-right',
-            status: 'error',
+            status: statusType,
             duration: 9000,
             isClosable: true,
         })
+    }
+
+    const register = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                surname: surname,
+                email: email,
+                password: password,
+                account_type: status,
+            }),
+        }
+        fetch('http://localhost:8080/api/register', requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.token !== 'Email already exists') {
+                    toastMessage('Success', 'You have successfully registered', 'success')
+                    localStorage.setItem('token', data.token)
+                }
+                if(data.token === 'Email already exists') {
+                    toastMessage('Error', 'Email already exists')
+                }})
     }
 
     const nameAndSurnameValidation = () => {
