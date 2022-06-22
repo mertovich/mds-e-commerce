@@ -2,7 +2,7 @@ package datamanager
 
 import "api/tools"
 
-func Login(email string, password string) (string) {
+func Login(email string, password string) string {
 	customerList := GetCustomers()
 	companyList := GetCompanies()
 	var tk = ""
@@ -24,27 +24,4 @@ func Login(email string, password string) (string) {
 	}
 
 	return tk
-}
-
-func Auth(token string) (bool) {
-	customerList := GetCustomers()
-	companyList := GetCompanies()
-
-	for _, customer := range customerList {
-		if customer.Token == token {
-			return true
-		}
-	}
-
-	for _, company := range companyList {
-		if company.Token == token {
-			return true
-		}
-	}
-
-	return false
-}
-
-func Test()  {
-	
 }

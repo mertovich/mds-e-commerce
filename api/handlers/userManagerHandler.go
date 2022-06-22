@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"api/auth"
 	"api/datamanager"
 	"api/models"
 	"api/tools"
@@ -116,7 +117,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	var user User
 	json.Unmarshal(bodyByte, &user)
 
-	auth := datamanager.Auth(user.Token)
+	auth := auth.Auth(user.Token)
 
 	authMap := map[string]bool{
 		"auth": auth,
