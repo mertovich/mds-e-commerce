@@ -25,3 +25,21 @@ func Login(email string, password string) string {
 
 	return tk
 }
+
+func RegisterControl(email string) bool {
+	customerList := GetCustomers()
+	companyList := GetCompanies()
+
+	for _, customer := range customerList {
+		if customer.Email == email {
+			return false
+		}
+	}
+
+	for _, company := range companyList {
+		if company.Email == email {
+			return false
+		}
+	}
+	return true
+}
