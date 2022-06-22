@@ -34,6 +34,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 
 	if user.AccountType == "Customer" {
+		control := datamanager.RegisterControl(user.Email)
+		if !control {
+			tokenMap := map[string]string{
+				"token": "Email already exists",
+			}
+			tokenJson, _ := json.Marshal(tokenMap)
+			fmt.Fprintf(w, string(tokenJson))
+			return
+		}
 		c := models.Customer{}
 		c.ID = tools.CreateId(user.AccountType)
 		c.Name = user.Name
@@ -52,6 +61,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		tokenJson, _ := json.Marshal(tokenMap)
 		fmt.Fprintf(w, string(tokenJson))
 	} else if user.AccountType == "Company" {
+		control := datamanager.RegisterControl(user.Email)
+		if !control {
+			tokenMap := map[string]string{
+				"token": "Email already exists",
+			}
+			tokenJson, _ := json.Marshal(tokenMap)
+			fmt.Fprintf(w, string(tokenJson))
+			return
+		}
 		c := models.Company{}
 		c.ID = tools.CreateId(user.AccountType)
 		c.Name = user.Name
