@@ -8,7 +8,7 @@ import { Skeleton } from '@chakra-ui/react'
 type Props = {}
 
 const Home = (props: Props) => {
-  const [user, setUser] = useState<boolean | null>(null)
+  const [user, setUser] = useState<boolean | null>(false)
   const [login, setLogin] = useState<boolean>(false)
 
   useEffect(() => {
@@ -18,10 +18,17 @@ const Home = (props: Props) => {
   const userControl = async () => {
     let token = localStorage.getItem('token')
     if (token) {
-      if (await authValidation(token)) {
-        setUser(true)
+      let user = await authValidation(token)
+      if (user) {
+        setUser(user)
+        setLogin(true)
+      } else {
+        setUser(false)
         setLogin(true)
       }
+    } else {
+      setUser(false)
+      setLogin(true)
     }
   }
 
