@@ -3,31 +3,38 @@ import NavBar from '../ui-library/components/NavBar'
 import UserNavBar from '../ui-library/components/UserNavBar'
 import ProductList from '../ui-library/components/ProductList'
 import { authValidation } from '../auth/index'
+import { Skeleton } from '@chakra-ui/react'
 
 type Props = {}
 
 const Home = (props: Props) => {
-  const [user, setUser] = useState<boolean>(false)
+  const [user, setUser] = useState<boolean | null>(null)
+  const [login, setLogin] = useState<boolean>(false)
 
-  useEffect(  () => {
+  useEffect(() => {
     userControl()
   }, [])
 
   const userControl = async () => {
     let token = localStorage.getItem('token')
     if (token) {
-      if(await authValidation(token)) {
+      if (await authValidation(token)) {
         setUser(true)
+        setLogin(true)
       }
     }
   }
 
   return (
     <div>
-      {
-        user ? <UserNavBar /> : <NavBar />
-      }
-      <ProductList />
+      <Skeleton
+        isLoaded={login}
+      >
+        {
+          user ? <UserNavBar /> : <NavBar />
+        }
+        <ProductList />
+      </Skeleton>
     </div>
   )
 }
