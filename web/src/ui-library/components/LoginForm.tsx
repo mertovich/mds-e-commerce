@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { EmailIcon } from '@chakra-ui/icons'
 import {
     Box,
@@ -9,7 +9,8 @@ import {
     Input,
     InputRightElement,
     useToast,
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
@@ -19,11 +20,12 @@ const LoginForm = (props: Props) => {
     const [passwordControl, setPasswordControl] = useState<boolean>(true)
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-  
+
     const handleClick = () => setShow(!show)
     const toast = useToast()
+    const navigate = useNavigate()
 
-    const toastMessage = (title: string, message: string, statusType:any='error') => {
+    const toastMessage = (title: string, message: string, statusType: any = 'error') => {
         toast({
             title: title,
             description: message,
@@ -33,31 +35,31 @@ const LoginForm = (props: Props) => {
             isClosable: true,
         })
     }
-  
+
     const emailValidate = () => {
-      if (email.length <=5) {
-        setEmailControl(false)
-        toastMessage('Email', 'Email is too short')
-      }
-      if(email.length > 20) {
-        setEmailControl(false)
-        toastMessage('Email', 'Email is too long')
-      }
-        if(email.length > 5 && email.length < 20) {
+        if (email.length <= 5) {
+            setEmailControl(false)
+            toastMessage('Email', 'Email is too short')
+        }
+        if (email.length > 20) {
+            setEmailControl(false)
+            toastMessage('Email', 'Email is too long')
+        }
+        if (email.length > 5 && email.length < 20) {
             setEmailControl(true)
         }
     }
-  
+
     const passwordValidate = () => {
-        if(password.length <= 5) {
+        if (password.length <= 5) {
             setPasswordControl(false)
             toastMessage('Password', 'Password is too short')
         }
-        if(password.length > 20) {
+        if (password.length > 20) {
             setPasswordControl(false)
             toastMessage('Password', 'Password is too long')
         }
-        if(password.length > 5 && password.length < 20) {
+        if (password.length > 5 && password.length < 20) {
             setPasswordControl(true)
         }
     }
@@ -69,24 +71,25 @@ const LoginForm = (props: Props) => {
             body: JSON.stringify({ email: email, password: password })
         }
         fetch('http://localhost:8080/api/login', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            if(data.token !== '') {
-                toastMessage('Success', 'Login Successful', 'success')
-                localStorage.setItem('token', data.token)
-            } else {
-                toastMessage('Error', 'Email or password is incorrect')
+            .then(response => response.json())
+            .then(data => {
+                if (data.token !== '') {
+                    toastMessage('Success', 'Login Successful', 'success')
+                    localStorage.setItem('token', data.token)
+                    navigate('/')
+                } else {
+                    toastMessage('Error', 'Email or password is incorrect')
+                }
             }
-        }
-        )
+            )
     }
-  
-    const loginHandler = () => {
-      emailValidate()
-      passwordValidate()
-      if (emailControl !== false && passwordControl !== false) {
-        login()
-      }
+
+    const loginHandler = async () => {
+        emailValidate()
+        passwordValidate()
+        if (emailControl !== false && passwordControl !== false) {
+            login()
+        }
     }
     return (
         <Box
