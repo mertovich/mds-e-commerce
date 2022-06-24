@@ -36,6 +36,7 @@ const UserNavBar = (props: Props) => {
     const logout = () => {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
+        navigate('/')
         window.location.reload()
     }
 
