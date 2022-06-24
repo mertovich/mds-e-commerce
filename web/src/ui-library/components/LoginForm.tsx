@@ -11,6 +11,7 @@ import {
     useToast,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
 
 type Props = {}
 
@@ -76,6 +77,8 @@ const LoginForm = (props: Props) => {
                 if (data.token !== '') {
                     toastMessage('Success', 'Login Successful', 'success')
                     localStorage.setItem('token', data.token)
+                    const decoded = jwt_decode(data.token)
+                    localStorage.setItem('user', JSON.stringify(decoded))
                     navigate('/')
                 } else {
                     toastMessage('Error', 'Email or password is incorrect')
