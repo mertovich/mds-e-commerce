@@ -1,5 +1,6 @@
 import { Box, HStack, Text, Menu, MenuItem, MenuButton, MenuList, Avatar, MenuGroup } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
@@ -17,6 +18,8 @@ interface User {
 const UserNavBar = (props: Props) => {
     const [user, setUser] = useState<User>({} as User)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         getUser()
     }, [])
@@ -28,6 +31,12 @@ const UserNavBar = (props: Props) => {
             setUser(usrObj)
             console.log(user.name)
         }
+    }
+
+    const logout = () => {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        window.location.reload()
     }
 
     return (
@@ -90,7 +99,7 @@ const UserNavBar = (props: Props) => {
                     <MenuGroup>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Settings</MenuItem>
-                        <MenuItem>Logout</MenuItem>
+                        <MenuItem onClick={() => logout()} >Logout</MenuItem>
                     </MenuGroup>
                 </MenuList>
                 </Menu>
