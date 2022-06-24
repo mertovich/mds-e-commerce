@@ -10,6 +10,7 @@ import {
     useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
@@ -29,6 +30,7 @@ const RegisterForm = (props: Props) => {
     const [statusControl, setStatusControl] = useState<boolean>(true)
 
     const toast = useToast()
+    const navigate = useNavigate()
 
     const handleSubmit = () => {
         nameAndSurnameValidation()
@@ -69,6 +71,7 @@ const RegisterForm = (props: Props) => {
                 if (data.token !== 'Email already exists') {
                     toastMessage('Success', 'You have successfully registered', 'success')
                     localStorage.setItem('token', data.token)
+                    navigate('/')
                 }
                 if(data.token === 'Email already exists') {
                     toastMessage('Error', 'Email already exists')
