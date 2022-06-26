@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
 
 type Props = {}
 
@@ -71,6 +72,8 @@ const RegisterForm = (props: Props) => {
                 if (data.token !== 'Email already exists') {
                     toastMessage('Success', 'You have successfully registered', 'success', 3000,'bottom-right')
                     localStorage.setItem('token', data.token)
+                    const decoded = jwt_decode(data.token)
+                    localStorage.setItem('user', JSON.stringify(decoded))
                     navigate('/')
                 }
                 if(data.token === 'Email already exists') {
