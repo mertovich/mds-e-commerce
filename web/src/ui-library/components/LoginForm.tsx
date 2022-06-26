@@ -26,13 +26,13 @@ const LoginForm = (props: Props) => {
     const toast = useToast()
     const navigate = useNavigate()
 
-    const toastMessage = (title: string, message: string, statusType: any = 'error') => {
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
         toast({
             title: title,
             description: message,
-            position: 'top-right',
+            position: positionValue,
             status: statusType,
-            duration: 9000,
+            duration: durationValue,
             isClosable: true,
         })
     }
@@ -75,7 +75,7 @@ const LoginForm = (props: Props) => {
             .then(response => response.json())
             .then(data => {
                 if (data.token !== '') {
-                    toastMessage('Success', 'Login Successful', 'success')
+                    toastMessage('Success', 'Login Successful', 'success',3000,'bottom-right')
                     localStorage.setItem('token', data.token)
                     const decoded = jwt_decode(data.token)
                     localStorage.setItem('user', JSON.stringify(decoded))
