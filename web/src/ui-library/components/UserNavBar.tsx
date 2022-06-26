@@ -1,6 +1,27 @@
-import { Box, HStack, Text, Menu, MenuItem, MenuButton, MenuList, Avatar, MenuGroup } from '@chakra-ui/react'
+import {
+    Box,
+    HStack,
+    Text,
+    Menu,
+    MenuItem,
+    MenuButton,
+    MenuList,
+    Avatar,
+    MenuGroup,
+    Button,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+} from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { MdShoppingBasket } from "react-icons/md"
+import ProductList from './ProductList'
 
 type Props = {}
 
@@ -17,8 +38,10 @@ interface User {
 
 const UserNavBar = (props: Props) => {
     const [user, setUser] = useState<User>({} as User)
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const navigate = useNavigate()
+    const btnRef = React.useRef(null)
 
     useEffect(() => {
         getUser()
@@ -92,17 +115,44 @@ const UserNavBar = (props: Props) => {
                 </Box>
             </HStack>
             <HStack>
+                <Button ref={btnRef} onClick={onOpen} leftIcon={<MdShoppingBasket />} colorScheme='blue' variant='solid'>
+                    Basket
+                </Button>
+                <Modal
+                    onClose={onClose}
+                    finalFocusRef={btnRef}
+                    isOpen={isOpen}
+                    scrollBehavior='inside'
+                >
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Basket</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                           {/* basketList */}
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                colorScheme={'green'}
+                                variant='solid'
+                                margin={2}
+                            >Buy
+                            </Button>
+                            <Button onClick={onClose}>Close</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
                 <Menu>
-                <MenuButton>
-                <Avatar name={`${user.name} ${user.surname}`} src='https://bit.ly/tioluwani-kolawole' />
-                </MenuButton>
-                <MenuList>
-                    <MenuGroup>
-                        <MenuItem>Profile</MenuItem>
-                        <MenuItem>Settings</MenuItem>
-                        <MenuItem onClick={() => logout()} >Logout</MenuItem>
-                    </MenuGroup>
-                </MenuList>
+                    <MenuButton>
+                        <Avatar name={`${user.name} ${user.surname}`} src='https://bit.ly/tioluwani-kolawole' />
+                    </MenuButton>
+                    <MenuList>
+                        <MenuGroup>
+                            <MenuItem>Profile</MenuItem>
+                            <MenuItem>Settings</MenuItem>
+                            <MenuItem onClick={() => logout()} >Logout</MenuItem>
+                        </MenuGroup>
+                    </MenuList>
                 </Menu>
             </HStack>
 
