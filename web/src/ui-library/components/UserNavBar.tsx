@@ -147,7 +147,7 @@ const UserNavBar = (props: Props) => {
                         <Avatar name={`${user.name} ${user.surname}`} src='https://bit.ly/tioluwani-kolawole' />
                     </MenuButton>
                     <MenuList>
-                        <MenuGroup>
+                        <MenuGroup textAlign={'start'} title={`${user.name} ${user.surname}`} >
                             <MenuItem>Profile</MenuItem>
                             <MenuItem>Settings</MenuItem>
                             <MenuItem onClick={() => logout()} >Logout</MenuItem>
