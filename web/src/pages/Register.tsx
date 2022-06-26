@@ -20,8 +20,6 @@ const Register = (props: Props) => {
       if(control) {
         navigate('/')
       }
-    } else {
-      navigate('/login')
     }
   }
 

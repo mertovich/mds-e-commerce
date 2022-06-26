@@ -22,8 +22,6 @@ const Login = (props: Props) => {
       if(control) {
         navigate('/')
       }
-    } else {
-      navigate('/login')
     }
   }
 
