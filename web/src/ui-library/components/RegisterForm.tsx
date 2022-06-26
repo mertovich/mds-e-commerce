@@ -42,13 +42,13 @@ const RegisterForm = (props: Props) => {
         }
     }
 
-    const toastMessage = (title: string, message: string, statusType:any='error') => {
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
         toast({
             title: title,
             description: message,
-            position: 'top-right',
+            position: positionValue,
             status: statusType,
-            duration: 9000,
+            duration: durationValue,
             isClosable: true,
         })
     }
@@ -69,7 +69,7 @@ const RegisterForm = (props: Props) => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.token !== 'Email already exists') {
-                    toastMessage('Success', 'You have successfully registered', 'success')
+                    toastMessage('Success', 'You have successfully registered', 'success', 3000,'bottom-right')
                     localStorage.setItem('token', data.token)
                     navigate('/')
                 }
