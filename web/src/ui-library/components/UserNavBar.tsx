@@ -21,7 +21,6 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MdShoppingBasket } from "react-icons/md"
-import ProductList from './ProductList'
 
 type Props = {}
 
@@ -61,6 +60,10 @@ const UserNavBar = (props: Props) => {
         localStorage.removeItem('token')
         navigate('/')
         window.location.reload()
+    }
+
+    const gotoSettings = () => {
+        navigate('/settings')
     }
 
     return (
@@ -148,8 +151,8 @@ const UserNavBar = (props: Props) => {
                     </MenuButton>
                     <MenuList>
                         <MenuGroup textAlign={'start'} title={`${user.name} ${user.surname}`} >
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>Settings</MenuItem>
+                            <MenuItem>Purchase history</MenuItem>
+                            <MenuItem onClick={() => gotoSettings()} >Settings</MenuItem>
                             <MenuItem onClick={() => logout()} >Logout</MenuItem>
                         </MenuGroup>
                     </MenuList>
