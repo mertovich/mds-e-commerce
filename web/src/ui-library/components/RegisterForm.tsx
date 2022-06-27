@@ -33,12 +33,13 @@ const RegisterForm = (props: Props) => {
     const toast = useToast()
     const navigate = useNavigate()
 
+
     const handleSubmit = () => {
         nameAndSurnameValidation()
         passwordValidation()
         emailValidation()
         statusValdiation()
-        if(nameControl && surnameControl && passwordControl && emailControl && statusControl) {
+        if(nameControl && surnameControl && passwordValidation() && emailControl && statusControl) {
             register()
         }
     }
@@ -136,26 +137,34 @@ const RegisterForm = (props: Props) => {
         if (password.length <= 5) {
             setPasswordControl(false)
             toastMessage('Password Error', 'Password must be at least 6 characters long')
+            return false
         }
         if (password.length > 20) {
             setPasswordControl(false)
             toastMessage('Password Error', 'Password must be less than 20 characters long')
+            return false
         }
         if (passwordConfirmation.length <= 5) {
             setPasswordControl(false)
             toastMessage('Password Confirmation Error', 'Password Confirmation must be at least 6 characters long')
+            return false
         }
         if (passwordConfirmation.length > 20) {
             setPasswordControl(false)
             toastMessage('Password Confirmation Error', 'Password Confirmation must be less than 20 characters long')
+            return false
         }
         if (password !== passwordConfirmation) {
             setPasswordControl(false)
             toastMessage('Password Confirmation Error', 'Password Confirmation must be the same as Password')
+            return false
         }
-        if (password.length >= 6 && password.length <= 20 && password === passwordConfirmation && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
+        if (password.length >= 6 && password.length <= 20 && password.match(passwordConfirmation) && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
             setPasswordControl(true)
+            return true
         }
+
+        return false
     }
 
     const statusValdiation = () => {
