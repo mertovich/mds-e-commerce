@@ -153,7 +153,7 @@ const RegisterForm = (props: Props) => {
             setPasswordControl(false)
             toastMessage('Password Confirmation Error', 'Password Confirmation must be the same as Password')
         }
-        if (password.length >= 6 && password.length <= 20 && password.length === passwordConfirmation.length && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
+        if (password.length >= 6 && password.length <= 20 && password === passwordConfirmation && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
             setPasswordControl(true)
         }
     }
