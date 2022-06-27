@@ -36,7 +36,6 @@ const RegisterForm = (props: Props) => {
 
     const handleSubmit = () => {
         nameAndSurnameValidation()
-        passwordValidation()
         emailValidation()
         statusValdiation()
         if(nameControl && surnameControl && passwordValidation() && emailControl && statusControl) {
@@ -133,7 +132,7 @@ const RegisterForm = (props: Props) => {
 
     }
 
-    const passwordValidation = () => {
+    const passwordValidation = ():boolean => {
         if (password.length <= 5) {
             setPasswordControl(false)
             toastMessage('Password Error', 'Password must be at least 6 characters long')
