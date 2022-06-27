@@ -2,6 +2,7 @@ package datamanager
 
 import (
 	"api/models"
+	"api/tools"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -32,4 +33,24 @@ func UpdateCustomer(c models.Customer) {
 	}
 	customersJson, _ := json.Marshal(customers)
 	ioutil.WriteFile(dataPathCustomers, customersJson, 0644)
+}
+
+func UpdateCustomerPersonal(id string, name string, surname string, email string, password string) string {
+	tk := ""
+	customers := GetCustomers()
+	for i, customer := range customers {
+		if customer.ID == id {
+			customers[i].Name = name
+			customers[i].Surname = surname
+			customers[i].Email = email
+			customers[i].Password = password
+			tmp := customers[i]
+			customers[i].Token = tools.CreateTokenCustomer(tmp)
+			tk = customers[i].Token
+		}
+	}
+	
+	customerJson, _ := json.Marshal(customers)
+	ioutil.WriteFile(dataPathCustomers, customerJson, 0644)
+	return tk
 }
