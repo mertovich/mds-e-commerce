@@ -66,6 +66,10 @@ const UserNavBar = (props: Props) => {
         navigate('/settings')
     }
 
+    const gotoPurchaseHistory = () => {
+        navigate('/purchase-history')
+    }
+
     return (
         <Box
             as="nav"
@@ -151,7 +155,7 @@ const UserNavBar = (props: Props) => {
                     </MenuButton>
                     <MenuList>
                         <MenuGroup textAlign={'start'} title={`${user.name} ${user.surname}`} >
-                            <MenuItem>Purchase history</MenuItem>
+                            <MenuItem onClick={() => gotoPurchaseHistory()} >Purchase history</MenuItem>
                             <MenuItem onClick={() => gotoSettings()} >Settings</MenuItem>
                             <MenuItem onClick={() => logout()} >Logout</MenuItem>
                         </MenuGroup>
