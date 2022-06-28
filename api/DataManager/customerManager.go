@@ -49,8 +49,18 @@ func UpdateCustomerPersonal(id string, name string, surname string, email string
 			tk = customers[i].Token
 		}
 	}
-	
+
 	customerJson, _ := json.Marshal(customers)
 	ioutil.WriteFile(dataPathCustomers, customerJson, 0644)
 	return tk
+}
+
+func GetCustomerPurchaseHistory(id string) []models.Product {
+	customers := GetCustomers()
+	for _, customer := range customers {
+		if customer.ID == id {
+			return customer.PurchaseHistory
+		}
+	}
+	return nil
 }
