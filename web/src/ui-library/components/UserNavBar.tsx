@@ -70,6 +70,10 @@ const UserNavBar = (props: Props) => {
         navigate('/purchase-history')
     }
 
+    const gotoHome = () => {
+        navigate('/')
+    }
+
     return (
         <Box
             as="nav"
@@ -81,9 +85,19 @@ const UserNavBar = (props: Props) => {
                 <Text
                     color={'blue.500'}
                     fontWeight={'bold'}
+                    onClick={() => gotoHome()}
                 >MDS Store</Text>
             </HStack>
             <HStack>
+            <Box 
+                    padding={2}
+                >
+                <Menu>
+                        <MenuButton 
+                            onClick={() => gotoHome()}
+                        >Home</MenuButton>
+                    </Menu>
+                </Box>
                 <Box
                     padding={2}
                 >
