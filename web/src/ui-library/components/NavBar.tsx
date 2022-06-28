@@ -9,7 +9,6 @@ const NavBar = (props: Props) => {
     const navigateHendler = (path: string) => {
         navigate(path)
     }
-
     return (
         <Box
             as="nav"
@@ -21,12 +20,22 @@ const NavBar = (props: Props) => {
                 <Text
                     color={'blue.500'}
                     fontWeight={'bold'}
+                    onClick={() => navigateHendler('/')}
                 >MDS Store</Text>
             </HStack>
             <HStack>
-                <Box
+                <Box 
                     padding={2}
                 >
+                <Menu>
+                        <MenuButton 
+                            onClick={() => navigateHendler('/')}
+                        >Home</MenuButton>
+                    </Menu>
+                </Box>
+                <Box
+                    padding={2}
+                    >
                     <Menu>
                         <MenuButton>Category</MenuButton>
                         <MenuList>
