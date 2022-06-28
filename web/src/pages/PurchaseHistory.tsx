@@ -1,5 +1,8 @@
-import { Box } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import {
+    Box,
+    Skeleton,
+} from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authValidation } from '../auth'
 import HistoryList from '../ui-library/components/HistoryList'
@@ -8,6 +11,8 @@ import UserNavBar from '../ui-library/components/UserNavBar'
 type Props = {}
 
 const PurchaseHistory = (props: Props) => {
+    const [loading, setLoading] = useState(false)
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -20,6 +25,8 @@ const PurchaseHistory = (props: Props) => {
             const control = await authValidation(token)
             if (!control) {
                 navigate('/')
+            } else {
+                setLoading(true)
             }
         }
         else if (token !== "") {
@@ -28,8 +35,10 @@ const PurchaseHistory = (props: Props) => {
     }
     return (
         <Box>
-            <UserNavBar/>
-            <HistoryList/>
+            <Skeleton isLoaded={loading} >
+                <UserNavBar />
+                <HistoryList />
+            </Skeleton>
         </Box>
     )
 }
