@@ -2,9 +2,9 @@ package datamanager
 
 import (
 	"api/models"
+	"api/tools"
 	"encoding/json"
 	"io/ioutil"
-	"api/tools"
 )
 
 var dataPathCompanies = "../../data/companies.json"
@@ -41,4 +41,14 @@ func UpdateCompanyPersonal(id string, name string, surname string, email string,
 	companyJson, _ := json.Marshal(companies)
 	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
 	return tk
+}
+
+func GetCompanyPurchaseHistory(id string) []models.Product {
+	companies := GetCompanies()
+	for _, company := range companies {
+		if company.ID == id {
+			return company.PurchaseHistory
+		}
+	}
+	return nil
 }
