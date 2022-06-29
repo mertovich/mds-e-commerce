@@ -79,6 +79,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		c.Password = user.Password
 		c.CreatedAt = time.Now().String()
 		c.Products = []models.Product{}
+		c.PurchaseHistory = []models.Product{}
 		c.Token = tools.CreateTokenCompany(c)
 
 		datamanager.SaveCompany(c)
