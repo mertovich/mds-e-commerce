@@ -4,6 +4,7 @@ import (
 	"api/models"
 	"encoding/json"
 	"io/ioutil"
+	"api/tools"
 )
 
 var dataPathCompanies = "../../data/companies.json"
@@ -20,4 +21,24 @@ func SaveCompany(c models.Company) {
 	companies = append(companies, c)
 	companiesJson, _ := json.Marshal(companies)
 	ioutil.WriteFile(dataPathCompanies, companiesJson, 0644)
+}
+
+func UpdateCompanyPersonal(id string, name string, surname string, email string, password string) string {
+	tk := ""
+	companies := GetCompanies()
+	for i, company := range companies {
+		if company.ID == id {
+			companies[i].Name = name
+			companies[i].Surname = surname
+			companies[i].Email = email
+			companies[i].Password = password
+			tmp := companies[i]
+			companies[i].Token = tools.CreateTokenCompany(tmp)
+			tk = companies[i].Token
+		}
+	}
+
+	companyJson, _ := json.Marshal(companies)
+	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
+	return tk
 }
