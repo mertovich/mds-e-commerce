@@ -22,7 +22,14 @@ const HistoryList = (props: Props) => {
     }, [])
 
 
-    const getPurchaseHistory = () => {
+    const getPurchaseHistory = async () => {
+        let userType = ''
+        if(user.id[0] === '1'){
+            userType = 'customer'
+        } else if(user.id[0] === '2'){
+            userType = 'company'
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -31,13 +38,12 @@ const HistoryList = (props: Props) => {
                 token: localStorage.getItem('token')
             })
         };
-        fetch('http://localhost:8080/api/customer/purchase-history', requestOptions)
+        fetch(`http://localhost:8080/api/${userType}/purchase-history`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setHistory(data.purchase_history)
             })
     }
-
 
     return (
         <Box>
