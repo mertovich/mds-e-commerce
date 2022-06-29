@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -142,4 +143,66 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	}
 	authJson, _ := json.Marshal(authMap)
 	fmt.Fprintf(w, string(authJson))
+}
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/user/update" {
+		http.NotFound(w, r)
+		return
+	}
+
+	type User struct {
+		ID       string `json:"id"`
+		Name     string `json:"name"`
+		Surname  string `json:"surname"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Token    string `json:"token"`
+	}
+
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	var user User
+	json.Unmarshal(bodyByte, &user)
+
+	userTypeCustomer := strings.Index(user.ID, "1")
+	userTypeCompany := strings.Index(user.ID, "2")
+
+	if userTypeCustomer == 0 {
+		authValid := auth.Auth(user.Token)
+		if authValid == true {
+			newToken := datamanager.UpdateCustomerPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
+			maps := map[string]string{"message": "Success", "token": newToken}
+			mapsJson, _ := json.Marshal(maps)
+			fmt.Fprintf(w, string(mapsJson))
+		} else {
+			fmt.Println("Invalid token")
+			maps := map[string]string{"message": "Invalid token"}
+			mapsJson, _ := json.Marshal(maps)
+			fmt.Fprintf(w, string(mapsJson))
+			return
+		}
+	} else if userTypeCompany == 0 {
+		authValid := auth.Auth(user.Token)
+		if authValid == true {
+			newToken := datamanager.UpdateCompanyPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
+			maps := map[string]string{"message": "Success", "token": newToken}
+			mapsJson, _ := json.Marshal(maps)
+			fmt.Fprintf(w, string(mapsJson))
+		} else {
+			fmt.Println("Invalid token")
+			maps := map[string]string{"message": "Invalid token"}
+			mapsJson, _ := json.Marshal(maps)
+			fmt.Fprintf(w, string(mapsJson))
+			return
+		}
+	} else {
+		fmt.Println("Invalid id")
+		maps := map[string]string{"message": "Invalid id"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+		return
+	}
 }
