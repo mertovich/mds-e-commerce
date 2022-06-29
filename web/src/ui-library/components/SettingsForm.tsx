@@ -78,7 +78,7 @@ const SettingsForm = (props: Props) => {
         token: localStorage.getItem('token'),
       }),
     }
-    fetch('http://localhost:8080/api/customer/update', requestOptions)
+    fetch('http://localhost:8080/api/user/update', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         console.log(data)
