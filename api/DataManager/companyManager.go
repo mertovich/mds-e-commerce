@@ -56,10 +56,11 @@ func GetCompanyPurchaseHistory(id string) []models.Product {
 func CompanyAddProduct(p models.Product) {
 	companies := GetCompanies()
 	for i, company := range companies {
-		if (company.ID == p.SellerId) {
+		if company.ID == p.SellerId {
 			companies[i].Products = append(companies[i].Products, p)
 		}
 	}
+	SaveProduct(p)
 	companyJson, _ := json.Marshal(companies)
 	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
 }
