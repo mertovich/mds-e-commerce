@@ -14,7 +14,7 @@ import {
   Select,
   useToast,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 type Props = {}
 
@@ -24,21 +24,9 @@ const ProductAddForm = (props: Props) => {
   const [description, setDescription] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
+  const [user, setUser] = useState<any>({})
 
   const toast = useToast()
-
-  const submithandler = () => {
-    validate()
-  }
-
-  const validate = () => {
-    if (name !== '' && imageLink !== '' && description !== '' && category !== '' && price !== 0) {
-      toastMessage('Success', 'Product added successfully', 'success', 3000, 'bottom-right')
-    } else { 
-      toastMessage('Error', 'Please fill all the fields', 'error', 3000, 'bottom-right')
-    }
-  }
-
   const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
     toast({
       title: title,
@@ -49,6 +37,52 @@ const ProductAddForm = (props: Props) => {
       isClosable: true,
     })
   }
+
+  useEffect(() => {
+    getUser()
+  }, [])
+
+  const submithandler = () => {
+    validate()
+  }
+
+  const getUser = () => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    setUser(user)
+  }
+
+  const validate = () => {
+    if (name !== '' && imageLink !== '' && description !== '' && category !== '' && price !== 0) {
+      PostProduct()
+      toastMessage('Success', 'Product added successfully', 'success', 3000, 'bottom-right')
+    } else { 
+      toastMessage('Error', 'Please fill all the fields', 'error', 3000, 'bottom-right')
+    }
+  }
+
+  const PostProduct = () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        image: imageLink,
+        description: description,
+        category: category,
+        price: price,
+        seller: `${user.name} ${user.surname}`,
+        seller_id: user.id,
+      }),
+    }
+    fetch('http://localhost:8080/api/company/add-product', requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+      }
+      )
+  }
+
+
 
   return (
     <Box>
