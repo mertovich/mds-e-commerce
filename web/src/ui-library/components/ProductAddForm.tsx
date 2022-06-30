@@ -54,7 +54,6 @@ const ProductAddForm = (props: Props) => {
   const validate = () => {
     if (name !== '' && imageLink !== '' && description !== '' && category !== '' && price !== 0) {
       PostProduct()
-      toastMessage('Success', 'Product added successfully', 'success', 3000, 'bottom-right')
     } else { 
       toastMessage('Error', 'Please fill all the fields', 'error', 3000, 'bottom-right')
     }
@@ -72,12 +71,19 @@ const ProductAddForm = (props: Props) => {
         price: price,
         seller: `${user.name} ${user.surname}`,
         seller_id: user.id,
+        token: localStorage.getItem('token') || '',
       }),
     }
     fetch('http://localhost:8080/api/company/add-product', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
+        if(data.message === 'success'){
+          toastMessage('Success', 'Product added successfully', 'success', 3000, 'bottom-right')
+          setName('')
+          setImageLink('')
+          setDescription('')
+          setCategory('')
+        }
       }
       )
   }
@@ -97,10 +103,10 @@ const ProductAddForm = (props: Props) => {
           marginBottom={'3%'}
           align={'start'}
         >
-          <Input onChange={(e) => setName(e.target.value)} placeholder='Product Name' />
-          <Input onChange={(e) => setImageLink(e.target.value)} placeholder='Product image link' />
-          <Input onChange={(e) => setDescription(e.target.value)} placeholder='Product Description' />
-          <Select onChange={(e) => setCategory(e.target.value)} placeholder='Category'>
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder='Product Name' />
+          <Input value={imageLink} onChange={(e) => setImageLink(e.target.value)} placeholder='Product image link' />
+          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Product Description' />
+          <Select value={category} onChange={(e) => setCategory(e.target.value)} placeholder='Category'>
             <option value='table'>Table</option>
             <option value='chair'>Chair</option>
             <option value='seat'>Seat</option>
@@ -113,7 +119,7 @@ const ProductAddForm = (props: Props) => {
           </Select>
           <InputGroup>
             <InputLeftAddon children='Price' />
-            <NumberInput
+            <NumberInput 
               defaultValue={0}
               width={'100%'}
             >
