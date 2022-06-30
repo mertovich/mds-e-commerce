@@ -35,13 +35,13 @@ const NavBar = (props: Props) => {
                 </Box>
                 <Box
                     padding={2}
-                    >
+                >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>living room</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Table</MenuItem>
+                            <MenuItem>Chair</MenuItem>
+                            <MenuItem>Seat</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -49,11 +49,11 @@ const NavBar = (props: Props) => {
                     padding={2}
                 >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>Kitchen</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Kitchen cupboard</MenuItem>
+                            <MenuItem>Kitchen countertops</MenuItem>
+                            <MenuItem>Dinner table</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -61,11 +61,11 @@ const NavBar = (props: Props) => {
                     padding={2}
                 >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>Garden</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Garden armchair</MenuItem>
+                            <MenuItem>Garden table</MenuItem>
+                            <MenuItem>Garden accessory</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
