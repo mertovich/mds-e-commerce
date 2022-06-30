@@ -52,24 +52,51 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type Prd struct {
+		ID          string           `json:"id"`
+		Name        string           `json:"name"`
+		SellerId    string           `json:"seller_id"`
+		Seller      string           `json:"seller"`
+		Image       string           `json:"image"`
+		Description string           `json:"description"`
+		Price       float32          `json:"price"`
+		Category    string           `json:"category"`
+		Comments    []models.Comment `json:"comments"`
+		CreatedAt   string           `json:"created_at"`
+		Token       string           `json:"token"`
+	}
+
+	var prd Prd
+
 	p := models.Product{}
 	bodyByte, _ := ioutil.ReadAll(r.Body)
-	json.Unmarshal(bodyByte, &p)
-	if p.SellerId != "" {
-		p.ID = tools.CreateProductId()
-		p.CreatedAt = time.Now().String()
-		p.Comments = []models.Comment{}
+	json.Unmarshal(bodyByte, &prd)
+	authValid := auth.Auth(prd.Token)
+	if authValid == true {
+		prd.ID = tools.CreateProductId()
+		prd.CreatedAt = time.Now().String()
+		prd.Comments = []models.Comment{}
 
-		fmt.Printf("id: %s\n", p.ID)
-		fmt.Printf("Createat: %s\n", p.CreatedAt)
-		fmt.Printf("name: %s\n", p.Name)
-		fmt.Printf("des: %s\n", p.Description)
-		fmt.Printf("price: %f\n", p.Price)
-		fmt.Printf("sellerId: %s\n", p.SellerId)
-		fmt.Printf("image: %s\n", p.Image)
-		fmt.Printf("category: %s\n", p.Category)
-		fmt.Printf("seller: %s\n", p.Seller)
+		p.ID = prd.ID
+		p.Name = prd.Name
+		p.SellerId = prd.SellerId
+		p.Seller = prd.Seller
+		p.Image = prd.Image
+		p.Description = prd.Description
+		p.Price = prd.Price
+		p.Category = prd.Category
+		p.Comments = prd.Comments
+		p.CreatedAt = prd.CreatedAt
 
 		datamanager.CompanyAddProduct(p)
+		maps := map[string]string{"message": "success"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+	} else {
+		fmt.Println("Invalid token")
+		maps := map[string]string{"message": "Invalid token"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+		return
 	}
 }
