@@ -37,6 +37,7 @@ interface User {
 
 const UserNavBar = (props: Props) => {
     const [user, setUser] = useState<User>({} as User)
+    const [addProductControl, setAddProductcontrol] = useState<boolean>(true)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const navigate = useNavigate()
@@ -44,6 +45,7 @@ const UserNavBar = (props: Props) => {
 
     useEffect(() => {
         getUser()
+
     }, [])
 
     const getUser = async () => {
@@ -51,7 +53,21 @@ const UserNavBar = (props: Props) => {
         if (usr) {
             const usrObj: User = JSON.parse(usr)
             setUser(usrObj)
-            console.log(user.name)
+            await getUserType()
+        }
+    }
+
+    const getUserType = () => {
+        const usr = localStorage.getItem('user')
+        if (usr) {
+            const usrObj: User = JSON.parse(usr)
+            if (usrObj.id[0] === '1' ) {
+                setAddProductcontrol(true)
+            } else if (usrObj.id[0] === '2') {
+                setAddProductcontrol(false)
+            } else {
+                setAddProductcontrol(true)
+            }
         }
     }
 
@@ -74,6 +90,10 @@ const UserNavBar = (props: Props) => {
         navigate('/')
     }
 
+    const goToAddProduct = () => {
+        navigate('/product-add')
+    }
+
     return (
         <Box
             as="nav"
@@ -89,11 +109,11 @@ const UserNavBar = (props: Props) => {
                 >MDS Store</Text>
             </HStack>
             <HStack>
-            <Box 
+                <Box
                     padding={2}
                 >
-                <Menu>
-                        <MenuButton 
+                    <Menu>
+                        <MenuButton
                             onClick={() => gotoHome()}
                         >Home</MenuButton>
                     </Menu>
@@ -102,11 +122,11 @@ const UserNavBar = (props: Props) => {
                     padding={2}
                 >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>living room</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Table</MenuItem>
+                            <MenuItem>Chair</MenuItem>
+                            <MenuItem>Seat</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -114,11 +134,11 @@ const UserNavBar = (props: Props) => {
                     padding={2}
                 >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>Kitchen</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Kitchen cupboard</MenuItem>
+                            <MenuItem>Kitchen countertops</MenuItem>
+                            <MenuItem>Dinner table</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -126,11 +146,11 @@ const UserNavBar = (props: Props) => {
                     padding={2}
                 >
                     <Menu>
-                        <MenuButton>Category</MenuButton>
+                        <MenuButton>Garden</MenuButton>
                         <MenuList>
-                            <MenuItem>Category 1</MenuItem>
-                            <MenuItem>Category 2</MenuItem>
-                            <MenuItem>Category 3</MenuItem>
+                            <MenuItem>Garden armchair</MenuItem>
+                            <MenuItem>Garden table</MenuItem>
+                            <MenuItem>Garden accessory</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -150,7 +170,7 @@ const UserNavBar = (props: Props) => {
                         <ModalHeader>Basket</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                           {/* basketList */}
+                            {/* basketList */}
                         </ModalBody>
                         <ModalFooter>
                             <Button
@@ -169,6 +189,7 @@ const UserNavBar = (props: Props) => {
                     </MenuButton>
                     <MenuList>
                         <MenuGroup textAlign={'start'} title={`${user.name} ${user.surname}`} >
+                            <MenuItem onClick={() => goToAddProduct()} hidden={addProductControl} >Add Product</MenuItem>
                             <MenuItem onClick={() => gotoPurchaseHistory()} >Purchase history</MenuItem>
                             <MenuItem onClick={() => gotoSettings()} >Settings</MenuItem>
                             <MenuItem onClick={() => logout()} >Logout</MenuItem>
