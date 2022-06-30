@@ -16,3 +16,9 @@ func CreateId(acctype string) string {
 
 	return uuid
 }
+
+func CreateProductId() string {
+	// Create a new UUID
+	uuid := uuid.NewString()
+	return "0" + uuid
+}
