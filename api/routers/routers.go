@@ -13,4 +13,5 @@ func Inıt() {
 	http.HandleFunc("/api/customer/purchase-history", handlers.CustomerPurchaseHistory)
 	http.HandleFunc("/api/company/purchase-history", handlers.CompanyPurchaseHistory)
 	http.HandleFunc("/api/company/add-product", handlers.CompanyAddProduct)
+	http.HandleFunc("/api/products", handlers.GetAllProducts)
 }
