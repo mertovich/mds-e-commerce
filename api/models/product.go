@@ -7,7 +7,7 @@ type Product struct {
 	Seller      string    `json:"seller"`
 	Image       string    `json:"image"`
 	Description string    `json:"description"`
-	Price       int       `json:"price"`
+	Price       float32   `json:"price"`
 	Category    string    `json:"category"`
 	Comments    []Comment `json:"comments"`
 	CreatedAt   string    `json:"created_at"`
