@@ -64,7 +64,7 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Createat: %s\n", p.CreatedAt)
 		fmt.Printf("name: %s\n", p.Name)
 		fmt.Printf("des: %s\n", p.Description)
-		fmt.Printf("price: %d\n", p.Price)
+		fmt.Printf("price: %f\n", p.Price)
 		fmt.Printf("sellerId: %s\n", p.SellerId)
 		fmt.Printf("image: %s\n", p.Image)
 		fmt.Printf("category: %s\n", p.Category)
