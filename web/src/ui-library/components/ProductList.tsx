@@ -15,12 +15,32 @@ import {
     Spinner,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 type Props = {}
 
 const ProductList = (props: Props) => {
     const [Loaded, setLoaded] = useState<boolean>(true)
+
+    const [Products, setProducts] = useState<any[]>([])
+
+    useEffect(() => {
+        getProductsList()
+    }, [])
+
+    const getProductsList = async () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+        }
+        fetch('http://localhost:8080/api/products', requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                setProducts(data)
+                console.log(data)
+            })
+    }
 
     return (
         <Box>
@@ -47,7 +67,7 @@ const ProductList = (props: Props) => {
                         paddingLeft={'3%'}
                         paddingRight={'3%'}
                     >
-                        {Array.from({ length: 12 }).map((_, index) => (
+                        {Products.map((p:any, i) => (
                             <Box
                                 bgColor={'gray.200'}
                                 borderRadius={'10px'}
@@ -56,19 +76,19 @@ const ProductList = (props: Props) => {
                                     width={'100%'}
                                     bgColor={'blackAlpha.100'}
                                 >
-                                    <Image src='https://www.pngmart.com/files/21/Accent-Chair-PNG-Photos.png' height={'300px'} />
+                                    <Image src={p.image} height={'300px'} />
                                 </Box>
                                 <Text
                                     fontSize={'xl'}
                                     textAlign={'center'}
                                     padding={5}
-                                >Chair Model X
+                                >{p.name}
                                 </Text>
                                 <Stat
                                     textAlign={'center'}
                                 >
-                                    <StatLabel>selle name</StatLabel>
-                                    <StatNumber>£0.00</StatNumber>
+                                    <StatLabel>{p.seller}</StatLabel>
+                                    <StatNumber>£{p.price}</StatNumber>
                                 </Stat>
                                 <HStack
                                     justifyContent={'center'}
