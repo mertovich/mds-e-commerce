@@ -17,10 +17,20 @@ import {
     ModalCloseButton,
     ModalBody,
     ModalFooter,
+    TableContainer,
+    Table,
+    TableCaption,
+    Thead,
+    Tr,
+    Th,
+    Tbody,
+    Td,
+    Image,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MdShoppingBasket } from "react-icons/md"
+import { CloseIcon, Icon } from '@chakra-ui/icons'
 
 type Props = {}
 
@@ -39,14 +49,28 @@ const UserNavBar = (props: Props) => {
     const [user, setUser] = useState<User>({} as User)
     const [addProductControl, setAddProductcontrol] = useState<boolean>(true)
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [basketList, setBasketList] = useState<object[]>([])
 
     const navigate = useNavigate()
     const btnRef = React.useRef(null)
 
     useEffect(() => {
         getUser()
-
     }, [])
+
+    const removeBasketItem = (index: number) => {
+        const newBasketList = basketList.filter((item, i) => i !== index)
+        setBasketList(newBasketList)
+        localStorage.setItem('basketList', JSON.stringify(newBasketList))
+    }
+
+    const getBasketList = () => {
+        onOpen()
+        let tmpList = localStorage.getItem('basketList')
+        if (tmpList) {
+            setBasketList(JSON.parse(tmpList))
+        }
+    }
 
     const getUser = async () => {
         const usr = localStorage.getItem('user')
@@ -61,7 +85,7 @@ const UserNavBar = (props: Props) => {
         const usr = localStorage.getItem('user')
         if (usr) {
             const usrObj: User = JSON.parse(usr)
-            if (usrObj.id[0] === '1' ) {
+            if (usrObj.id[0] === '1') {
                 setAddProductcontrol(true)
             } else if (usrObj.id[0] === '2') {
                 setAddProductcontrol(false)
@@ -156,7 +180,12 @@ const UserNavBar = (props: Props) => {
                 </Box>
             </HStack>
             <HStack>
-                <Button ref={btnRef} onClick={onOpen} leftIcon={<MdShoppingBasket />} colorScheme='blue' variant='solid'>
+                <Button
+                    ref={btnRef}
+                    onClick={() => getBasketList()}
+                    leftIcon={<MdShoppingBasket />}
+                    colorScheme='blue' variant='solid'
+                >
                     Basket
                 </Button>
                 <Modal
@@ -170,8 +199,50 @@ const UserNavBar = (props: Props) => {
                         <ModalHeader>Basket</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            {/* basketList */}
+                            <TableContainer>
+                                <Table variant='simple' size={'sm'}>
+                                    <Thead>
+                                        <Tr>
+                                            <Th></Th>
+                                            <Th>Product Name</Th>
+                                            <Th isNumeric>Price</Th>
+                                            <Th></Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {basketList.map((item: any, index) => (
+                                            <Tr key={index}>
+                                                <Td>
+                                                    <Image
+                                                        src={item.image}
+                                                        alt='product iamge'
+                                                    />
+                                                </Td>
+                                                <Td>{item.name}</Td>
+                                                <Td isNumeric>£{item.price}</Td>
+                                                <Td>
+                                                    <Button
+                                                        onClick={() => removeBasketItem(index)}
+                                                        size={'sm'}
+                                                        colorScheme='red'
+                                                        variant='solid'
+                                                    >
+                                                        <Icon
+                                                            as={CloseIcon} />
+                                                    </Button>
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
                         </ModalBody>
+                        <Text
+                            fontSize={'xl'}
+                            margin={2}
+                        >
+                            Total: £{basketList.reduce((acc: number, item: any) => acc + item.price, 0)}
+                        </Text>
                         <ModalFooter>
                             <Button
                                 colorScheme={'green'}
