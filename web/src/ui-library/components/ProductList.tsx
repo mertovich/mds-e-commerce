@@ -13,6 +13,7 @@ import {
     HStack,
     Button,
     Spinner,
+    useToast
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
@@ -23,6 +24,20 @@ const ProductList = (props: Props) => {
     const [Loaded, setLoaded] = useState<boolean>(true)
     const [User,SetUser] = useState<any>({})
     const [Products, setProducts] = useState<any[]>([])
+
+    const toast = useToast()
+
+
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
+        toast({
+            title: title,
+            description: message,
+            position: positionValue,
+            status: statusType,
+            duration: durationValue,
+            isClosable: true,
+        })
+    }
 
     useEffect(() => {
         getProductsList()
@@ -46,7 +61,6 @@ const ProductList = (props: Props) => {
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data)
-                console.log(data)
             })
     }
 
@@ -77,7 +91,9 @@ const ProductList = (props: Props) => {
         fetch('http://localhost:8080/api/customer/product-buy', requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
+                if(data.message == 'success') {
+                    toastMessage('Success', 'You have successfully buy product', 'success', 3000,'bottom-right')
+                }
             })
     }
 
