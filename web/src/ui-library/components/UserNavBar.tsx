@@ -19,7 +19,6 @@ import {
     ModalFooter,
     TableContainer,
     Table,
-    TableCaption,
     Thead,
     Tr,
     Th,
@@ -57,6 +56,11 @@ const UserNavBar = (props: Props) => {
     useEffect(() => {
         getUser()
     }, [])
+
+    const deleteAllItem = () => {
+        setBasketList([])
+        localStorage.setItem('basketList', JSON.stringify([]))
+    }
 
     const removeBasketItem = (index: number) => {
         const newBasketList = basketList.filter((item, i) => i !== index)
@@ -244,6 +248,13 @@ const UserNavBar = (props: Props) => {
                             Total: £{basketList.reduce((acc: number, item: any) => acc + item.price, 0)}
                         </Text>
                         <ModalFooter>
+                        <Button
+                                colorScheme={'red'}
+                                variant='solid'
+                                margin={2}
+                                onClick={() => deleteAllItem()}
+                            >Delete All item
+                            </Button>
                             <Button
                                 colorScheme={'green'}
                                 variant='solid'
