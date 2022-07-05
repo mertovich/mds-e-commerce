@@ -21,12 +21,20 @@ type Props = {}
 
 const ProductList = (props: Props) => {
     const [Loaded, setLoaded] = useState<boolean>(true)
-
+    const [User,SetUser] = useState<any>({})
     const [Products, setProducts] = useState<any[]>([])
 
     useEffect(() => {
         getProductsList()
+        getUser()
     }, [])
+
+    const getUser= () => {
+       let usr = localStorage.getItem('user')
+         if(usr){
+             SetUser(JSON.parse(usr))
+         }
+    }
 
     const getProductsList = async () => {
         const requestOptions = {
@@ -54,6 +62,23 @@ const ProductList = (props: Props) => {
             basketList.push(product)
             localStorage.setItem('basketList', JSON.stringify(basketList))
         }
+    }
+
+    const productBuy = (product: any) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: User.id,
+                token: localStorage.getItem('token'),
+                product: product
+            }),
+        }
+        fetch('http://localhost:8080/api/customer/product-buy', requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+            })
     }
 
     return (
@@ -111,6 +136,7 @@ const ProductList = (props: Props) => {
                                         colorScheme={'green'}
                                         variant='solid'
                                         margin={2}
+                                        onClick={() => productBuy(p)}
                                     >Buy
                                     </Button>
                                     <Button
