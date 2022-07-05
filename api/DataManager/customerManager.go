@@ -55,12 +55,13 @@ func UpdateCustomerPersonal(id string, name string, surname string, email string
 	return tk
 }
 
-func GetCustomerPurchaseHistory(id string) []models.Product {
+
+func GetCustomer (id string) models.Customer {
 	customers := GetCustomers()
 	for _, customer := range customers {
 		if customer.ID == id {
-			return customer.PurchaseHistory
+			return customer
 		}
 	}
-	return nil
+	return models.Customer{}
 }
