@@ -10,8 +10,9 @@ func Inıt() {
 	http.HandleFunc("/api/login", handlers.Login)
 	http.HandleFunc("/api/auth", handlers.Auth)
 	http.HandleFunc("/api/user/update", handlers.UpdateUser)
-	http.HandleFunc("/api/customer/purchase-history", handlers.CustomerPurchaseHistory)
+	http.HandleFunc("/api/customer/purchase-history", handlers.CustomerPurchaseHistoryGet)
 	http.HandleFunc("/api/company/purchase-history", handlers.CompanyPurchaseHistory)
 	http.HandleFunc("/api/company/add-product", handlers.CompanyAddProduct)
 	http.HandleFunc("/api/products", handlers.GetAllProducts)
+	http.HandleFunc("/api/customer/product-buy", handlers.CustomerProductPost)
 }
