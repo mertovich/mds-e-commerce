@@ -63,7 +63,7 @@ func CustomerProductPost(w http.ResponseWriter, r *http.Request) {
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
 		datamanager.AddProductHistoryCustomer(user.Product, user.ID)
-		maps := map[string]string{"message": "Success"}
+		maps := map[string]string{"message": "success"}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))
 	} else {
