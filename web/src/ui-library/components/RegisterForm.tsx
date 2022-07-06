@@ -32,6 +32,7 @@ const RegisterForm = (props: Props) => {
 
     const toast = useToast()
     const navigate = useNavigate()
+    const config = require('../../config.json')
 
 
     const handleSubmit = () => {
@@ -66,7 +67,7 @@ const RegisterForm = (props: Props) => {
                 account_type: status,
             }),
         }
-        fetch('http://localhost:8080/api/register', requestOptions)
+        fetch(`${config.api_url}/api/register`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.token !== 'Email already exists') {

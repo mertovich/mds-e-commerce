@@ -26,6 +26,7 @@ const ProductAddForm = (props: Props) => {
   const [price, setPrice] = useState<number>(0)
   const [user, setUser] = useState<any>({})
 
+  const config = require('../../config.json')
   const toast = useToast()
   const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
     toast({
@@ -74,7 +75,7 @@ const ProductAddForm = (props: Props) => {
         token: localStorage.getItem('token') || '',
       }),
     }
-    fetch('http://localhost:8080/api/company/add-product', requestOptions)
+    fetch(`${config.api_url}/api/company/add-product`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if(data.message === 'success'){

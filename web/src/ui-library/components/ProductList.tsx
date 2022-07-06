@@ -26,6 +26,7 @@ const ProductList = (props: Props) => {
     const [Products, setProducts] = useState<any[]>([])
 
     const toast = useToast()
+    const config = require('../../config.json')
 
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
@@ -57,7 +58,7 @@ const ProductList = (props: Props) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({}),
         }
-        fetch('http://localhost:8080/api/products', requestOptions)
+        fetch(`${config.api_url}/api/products`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data)
@@ -88,7 +89,7 @@ const ProductList = (props: Props) => {
                 product: product
             }),
         }
-        fetch('http://localhost:8080/api/customer/product-buy', requestOptions)
+        fetch(`${config.api_url}/api/customer/product-buy`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if(data.message == 'success') {

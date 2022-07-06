@@ -17,6 +17,8 @@ const HistoryList = (props: Props) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [history, setHistory] = useState([])
 
+    const config = require('../../config.json')
+
     useEffect(() => {
         getPurchaseHistory()
     }, [])
@@ -38,7 +40,7 @@ const HistoryList = (props: Props) => {
                 token: localStorage.getItem('token')
             })
         };
-        fetch(`http://localhost:8080/api/${userType}/purchase-history`, requestOptions)
+        fetch(`${config.api_url}/api/${userType}/purchase-history`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setHistory(data.purchase_history)

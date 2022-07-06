@@ -25,6 +25,7 @@ const LoginForm = (props: Props) => {
     const handleClick = () => setShow(!show)
     const toast = useToast()
     const navigate = useNavigate()
+    const config = require('../../config')
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
         toast({
@@ -71,7 +72,7 @@ const LoginForm = (props: Props) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email, password: password })
         }
-        fetch('http://localhost:8080/api/login', requestOptions)
+        fetch(`${config.api_url}/api/login`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.token !== '') {
