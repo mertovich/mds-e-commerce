@@ -21,3 +21,13 @@ func SaveProduct(p models.Product) {
 	productsJson, _ := json.Marshal(products)
 	ioutil.WriteFile(dataPathProducts, productsJson, 0644)
 }
+
+func GetProductId(id string) models.Product {
+	products := GetProducts()
+	for _, p := range products {
+		if p.ID == id {
+			return p
+		}
+	}
+	return models.Product{}
+}
