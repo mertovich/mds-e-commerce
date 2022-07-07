@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
@@ -27,7 +28,11 @@ const ProductList = (props: Props) => {
 
     const toast = useToast()
     const config = require('../../config.json')
+    const navigate = useNavigate()
 
+    const productNavigate = (id: string) => {
+        navigate(`/product/${id}`)
+    }
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
         toast({
@@ -162,6 +167,14 @@ const ProductList = (props: Props) => {
                                         margin={2}
                                         onClick={() => addToBasket(p)}
                                     >add to Basket
+                                    </Button>
+                                    <Button
+                                        colorScheme={'yellow'}
+                                        variant='outline'
+                                        margin={2}
+                                        onClick={() => productNavigate(p.id)}
+                                    >
+                                        Details
                                     </Button>
                                 </HStack>
                             </Box>
