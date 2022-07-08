@@ -25,6 +25,7 @@ const ProductList = (props: Props) => {
     const [Loaded, setLoaded] = useState<boolean>(true)
     const [User,SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [Products, setProducts] = useState<any[]>([])
+    const [userType, setUserType] = useState<string>('customer')
 
     const toast = useToast()
     const config = require('../../config.json')
@@ -47,7 +48,22 @@ const ProductList = (props: Props) => {
 
     useEffect(() => {
         getProductsList()
+        getUserType()
     }, [])
+
+    const getUserType = () => {
+        const usr = localStorage.getItem('user')
+        if (usr) {
+            const usrObj = JSON.parse(usr)
+            if (usrObj.id[0] === '1') {
+                setUserType('customer')
+            } else if (usrObj.id[0] === '2') {
+                setUserType('company')
+            } else {
+                setUserType('')
+            }
+        }
+    }
 
     const getProductsList = async () => {
         const requestOptions = {
@@ -86,15 +102,14 @@ const ProductList = (props: Props) => {
                 product: product
             }),
         }
-        fetch(`${config.api_url}/api/customer/product-buy`, requestOptions)
+        fetch(`${config.api_url}/api/${userType}/product-buy`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                if(data.message == 'success') {
+                if(data.message === 'success') {
                     toastMessage('Success', 'You have successfully buy product', 'success', 3000,'bottom-right')
                 }
             })
     }
-
     return (
         <Box>
             <Stack
