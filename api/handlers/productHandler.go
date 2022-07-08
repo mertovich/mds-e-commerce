@@ -49,14 +49,15 @@ func AddProductComment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	if r.URL.Path != "/api/product/comment" {
+	if r.URL.Path != "/api/product-comment" {
 		http.NotFound(w, r)
 		return
 	}
 
 	type User struct {
-		Token   string         `json:"token"`
-		Comment models.Comment `json:"comment"`
+		ProductId string         `json:"product_id"`
+		Token     string         `json:"token"`
+		Comment   models.Comment `json:"comment"`
 	}
 
 	bodyByte, _ := ioutil.ReadAll(r.Body)
@@ -64,11 +65,13 @@ func AddProductComment(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 
 	authvalid := auth.Auth(user.Token)
-	if !authvalid {
-		log.Println("Invalid token")
-		return
+	if authvalid == false {
+		fmt.Fprint(w, "Invalid token")
 	}
 
-	fmt.Printf("%+v\n", user)
+	datamanager.AddProductComment(user.ProductId, user.Comment)
 
+	responeMap := map[string]string{"message": "success"}
+	responseJSON, _ := json.Marshal(responeMap)
+	fmt.Fprintf(w, string(responseJSON))
 }
