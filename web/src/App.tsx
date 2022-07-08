@@ -7,6 +7,7 @@ import Settings from './pages/Settings'
 import PurchaseHistory from './pages/PurchaseHistory'
 import ProductAdd from './pages/ProductAdd'
 import Detail from './pages/Detail'
+import ProductCategory from './pages/ProductCategory'
 
 type Props = {}
 
@@ -21,6 +22,7 @@ const App = (props: Props) => {
         <Route path="/purchase-history" element={<PurchaseHistory />} />
         <Route path='/product-add' element={<ProductAdd />} />
         <Route path='/product/:id' element={<Detail />} />
+        <Route path='/products/:category' element={<ProductCategory />} />
       </Routes>
     </div>
   )
