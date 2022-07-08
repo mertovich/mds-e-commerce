@@ -8,6 +8,7 @@ const NavBar = (props: Props) => {
 
     const navigateHendler = (path: string) => {
         navigate(path)
+        window.location.reload()
     }
     return (
         <Box
@@ -24,11 +25,11 @@ const NavBar = (props: Props) => {
                 >MDS Store</Text>
             </HStack>
             <HStack>
-                <Box 
+                <Box
                     padding={2}
                 >
-                <Menu>
-                        <MenuButton 
+                    <Menu>
+                        <MenuButton
                             onClick={() => navigateHendler('/')}
                         >Home</MenuButton>
                     </Menu>
@@ -39,9 +40,9 @@ const NavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>living room</MenuButton>
                         <MenuList>
-                            <MenuItem>Table</MenuItem>
-                            <MenuItem>Chair</MenuItem>
-                            <MenuItem>Seat</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Table')} >Table</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Chair')}>Chair</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Seat')}>Seat</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -51,9 +52,9 @@ const NavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>Kitchen</MenuButton>
                         <MenuList>
-                            <MenuItem>Kitchen cupboard</MenuItem>
-                            <MenuItem>Kitchen countertops</MenuItem>
-                            <MenuItem>Dinner table</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Kitchen-cupboard')}>Kitchen cupboard</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Kitchen-countertops')}>Kitchen countertops</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Dinner-table')}>Dinner table</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -63,9 +64,9 @@ const NavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>Garden</MenuButton>
                         <MenuList>
-                            <MenuItem>Garden armchair</MenuItem>
-                            <MenuItem>Garden table</MenuItem>
-                            <MenuItem>Garden accessory</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Garden-armchair')}>Garden armchair</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Garden-table')}>Garden table</MenuItem>
+                            <MenuItem onClick={() => navigateHendler('/products/Garden-accessory')}>Garden accessory</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -74,13 +75,13 @@ const NavBar = (props: Props) => {
                 <Button
                     colorScheme={'blue'}
                     variant="outline"
-                    onClick={() => navigateHendler('/login') }
+                    onClick={() => navigateHendler('/login')}
                 >Login
                 </Button>
                 <Button
                     colorScheme={'pink'}
                     variant="outline"
-                    onClick={() => navigateHendler('/register') }
+                    onClick={() => navigateHendler('/register')}
                 >Register
                 </Button>
             </HStack>

@@ -57,6 +57,11 @@ const UserNavBar = (props: Props) => {
         getUserType()
     }, [])
 
+    const navigateHandler = (path: string) => {
+        navigate(path)
+        window.location.reload()
+    }
+
     const deleteAllItem = () => {
         setBasketList([])
         localStorage.setItem('basketList', JSON.stringify([]))
@@ -143,9 +148,9 @@ const UserNavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>living room</MenuButton>
                         <MenuList>
-                            <MenuItem>Table</MenuItem>
-                            <MenuItem>Chair</MenuItem>
-                            <MenuItem>Seat</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Table')} >Table</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Chair')}>Chair</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Seat')}>Seat</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -155,9 +160,9 @@ const UserNavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>Kitchen</MenuButton>
                         <MenuList>
-                            <MenuItem>Kitchen cupboard</MenuItem>
-                            <MenuItem>Kitchen countertops</MenuItem>
-                            <MenuItem>Dinner table</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Kitchen-cupboard')}>Kitchen cupboard</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Kitchen-countertops')}>Kitchen countertops</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Dinner-table')}>Dinner table</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -167,9 +172,9 @@ const UserNavBar = (props: Props) => {
                     <Menu>
                         <MenuButton>Garden</MenuButton>
                         <MenuList>
-                            <MenuItem>Garden armchair</MenuItem>
-                            <MenuItem>Garden table</MenuItem>
-                            <MenuItem>Garden accessory</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Garden-armchair')}>Garden armchair</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Garden-table')}>Garden table</MenuItem>
+                            <MenuItem onClick={() => navigateHandler('/products/Garden-accessory')}>Garden accessory</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
