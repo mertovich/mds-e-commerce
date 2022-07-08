@@ -17,3 +17,9 @@ func GetCustomerPurchaseHistory(id string) []models.Product {
 	}
 	return nil
 }
+
+func AddProductHistoryCompany(p models.Product, id string) {
+	c := CompanyGetId(id)
+	c.PurchaseHistory = append(c.PurchaseHistory, p)
+	UpdateCompany(c)
+}
