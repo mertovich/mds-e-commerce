@@ -31,3 +31,21 @@ func GetProductId(id string) models.Product {
 	}
 	return models.Product{}
 }
+
+func UpdateProduct(p models.Product) {
+	products := GetProducts()
+	for i, product := range products {
+		if product.ID == p.ID {
+			products[i] = p
+			break
+		}
+	}
+	productsJson, _ := json.Marshal(products)
+	ioutil.WriteFile(dataPathProducts, productsJson, 0644)
+}
+
+func AddProductComment(id string, c models.Comment) {
+	product := GetProductId(id)
+	product.Comments = append(product.Comments, c)
+	UpdateProduct(product)
+}

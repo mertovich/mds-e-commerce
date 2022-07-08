@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"api/auth"
 	"api/datamanager"
+	"api/models"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -40,4 +43,32 @@ func GetProductId(w http.ResponseWriter, r *http.Request) {
 	product := datamanager.GetProductId(key)
 	productJSON, _ := json.Marshal(product)
 	fmt.Fprintf(w, string(productJSON))
+}
+
+func AddProductComment(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/product/comment" {
+		http.NotFound(w, r)
+		return
+	}
+
+	type User struct {
+		Token   string         `json:"token"`
+		Comment models.Comment `json:"comment"`
+	}
+
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	var user User
+	json.Unmarshal(bodyByte, &user)
+
+	authvalid := auth.Auth(user.Token)
+	if !authvalid {
+		log.Println("Invalid token")
+		return
+	}
+
+	fmt.Printf("%+v\n", user)
+
 }
