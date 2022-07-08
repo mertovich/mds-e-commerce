@@ -100,3 +100,38 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func CompanyProductPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/company/product-buy" {
+		http.NotFound(w, r)
+		return
+	}
+
+	type User struct {
+		ID      string         `json:"id"`
+		Token   string         `json:"token"`
+		Product models.Product `json:"product"`
+	}
+
+	var user User
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(bodyByte, &user)
+
+	authValid := auth.Auth(user.Token)
+	if authValid == true {
+		datamanager.AddProductHistoryCompany(user.Product, user.ID)
+		maps := map[string]string{"message": "success"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+	} else {
+		fmt.Println("Invalid token")
+		maps := map[string]string{"message": "Invalid token"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+		return
+	}
+
+}
