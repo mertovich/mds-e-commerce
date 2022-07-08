@@ -163,6 +163,8 @@ const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
                         minChildWidth='300px'
                         marginTop='3%'
                         marginBottom='3%'
+                        marginLeft='1%'
+                        marginRight='1%'
                     >
                         {searchResult.map((p: any, i) => (
                             <VStack
@@ -178,7 +180,10 @@ const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
                                     height='200px'
 
                                 />
-                                <Text>
+                                <Text
+                                    paddingLeft={'5%'}
+                                    paddingRight={'5%'}
+                                >
                                     {p.name.toUpperCase().slice(0, 150)} {p.name.length > 150 ? '...' : ''}
                                 </Text>
                                 <Text
