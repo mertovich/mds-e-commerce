@@ -10,10 +10,10 @@ import {
     Stat,
     StatLabel,
     StatNumber,
-    HStack,
     Button,
     Spinner,
-    useToast
+    useToast,
+    VStack,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
@@ -23,10 +23,10 @@ interface IProps {
     ProductsCategory: string
 }
 
-const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
+const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
 
     const [Loaded, setLoaded] = useState<boolean>(true)
-    const [User,SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
+    const [User, SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [Products, setProducts] = useState<any[]>([])
     const [userType, setUserType] = useState<string>('customer')
     const [searchControl, setSearchControl] = useState<boolean>(false)
@@ -41,7 +41,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
     }
 
     const searchHandler = (text: string) => {
-        if(text !== '') {
+        if (text !== '') {
             setSearchControl(true)
             let tmpList = Products.filter((product: any) => {
                 return product.name.toLowerCase().includes(text.toLowerCase())
@@ -53,7 +53,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
         }
     }
 
-    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
         toast({
             title: title,
             description: message,
@@ -97,9 +97,9 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
                     setSearchResult(data)
                 } else {
                     let category = ProductsCategory.toLowerCase().replaceAll('-', ' ')
-                    let tmpList:any = []
-                    data.forEach((product:any) => {
-                        if(product.category === category) {
+                    let tmpList: any = []
+                    data.forEach((product: any) => {
+                        if (product.category === category) {
                             tmpList.push(product)
                         }
                     });
@@ -136,8 +136,8 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
         fetch(`${config.api_url}/api/${userType}/product-buy`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                if(data.message === 'success') {
-                    toastMessage('Success', 'You have successfully buy product', 'success', 3000,'bottom-right')
+                if (data.message === 'success') {
+                    toastMessage('Success', 'You have successfully buy product', 'success', 3000, 'bottom-right')
                 }
             })
     }
@@ -161,62 +161,58 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
                     <SimpleGrid
                         spacing='1%'
                         minChildWidth='300px'
-                        paddingTop={'3%'}
-                        paddingBottom={'5%'}
-                        paddingLeft={'3%'}
-                        paddingRight={'3%'}
+                        marginTop='3%'
+                        marginBottom='3%'
                     >
-                        {searchResult.map((p:any, i) => (
-                            <Box
-                                bgColor={'gray.200'}
-                                borderRadius={'10px'}
+                        {searchResult.map((p: any, i) => (
+                            <VStack
                                 key={i}
+                                backgroundColor='gray.200'
+
                             >
-                                <Box
-                                    width={'100%'}
-                                    bgColor={'blackAlpha.100'}
-                                >
-                                    <Image src={p.image} height={'300px'} />
-                                </Box>
-                                <Text
-                                    fontSize={'xl'}
-                                    textAlign={'center'}
-                                    padding={5}
-                                >{p.name}
+                                <Image
+                                    src={p.image}
+                                    alt={p.name}
+                                    display='block'
+                                    margin={'auto'}
+                                    height='200px'
+
+                                />
+                                <Text>
+                                    {p.name.toUpperCase().slice(0, 150)} {p.name.length > 150 ? '...' : ''}
                                 </Text>
-                                <Stat
-                                    textAlign={'center'}
+                                <Text
+                                    fontSize='md'
+                                    fontWeight='bold'
                                 >
-                                    <StatLabel>{p.seller}</StatLabel>
-                                    <StatNumber>£{p.price}</StatNumber>
-                                </Stat>
-                                <HStack
-                                    justifyContent={'center'}
+                                    £{p.price}
+                                </Text>
+                                <Button
+                                    onClick={() => productBuy(p)}
+                                    colorScheme='green'
+                                    variant='solid'
+                                    width={'100%'}
                                 >
-                                    <Button
-                                        colorScheme={'green'}
-                                        variant='solid'
-                                        margin={2}
-                                        onClick={() => productBuy(p)}
-                                    >Buy
-                                    </Button>
-                                    <Button
-                                        colorScheme={'cyan'}
-                                        variant='outline'
-                                        margin={2}
-                                        onClick={() => addToBasket(p)}
-                                    >add to Basket
-                                    </Button>
-                                    <Button
-                                        colorScheme={'yellow'}
-                                        variant='outline'
-                                        margin={2}
-                                        onClick={() => productNavigate(p.id)}
-                                    >
-                                        Details
-                                    </Button>
-                                </HStack>
-                            </Box>
+                                    Buy
+                                </Button>
+                                <Button
+                                    onClick={() => addToBasket(p)}
+                                    colorScheme='blue'
+                                    variant='outline'
+                                    width={'100%'}
+                                >
+                                    Add to Basket
+                                </Button>
+                                <Button
+                                    onClick={() => productNavigate(p.id)}
+                                    colorScheme='orange'
+                                    variant='outline'
+                                    width={'100%'}
+                                >
+                                    Detail
+                                </Button>
+
+                            </VStack>
                         ))}
                     </SimpleGrid>
                     :
