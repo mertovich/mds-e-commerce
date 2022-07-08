@@ -53,6 +53,10 @@ const UserNavBar = (props: Props) => {
     const navigate = useNavigate()
     const btnRef = React.useRef(null)
 
+    useEffect(() => {
+        getUserType()
+    }, [])
+
     const deleteAllItem = () => {
         setBasketList([])
         localStorage.setItem('basketList', JSON.stringify([]))
