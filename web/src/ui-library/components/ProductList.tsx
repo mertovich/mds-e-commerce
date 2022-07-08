@@ -29,6 +29,8 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
     const [User,SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [Products, setProducts] = useState<any[]>([])
     const [userType, setUserType] = useState<string>('customer')
+    const [searchControl, setSearchControl] = useState<boolean>(false)
+    const [searchResult, setSearchResult] = useState<any[]>([])
 
     const toast = useToast()
     const config = require('../../config.json')
@@ -36,6 +38,19 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
 
     const productNavigate = (id: string) => {
         navigate(`/product/${id}`)
+    }
+
+    const searchHandler = (text: string) => {
+        if(text !== '') {
+            setSearchControl(true)
+            let tmpList = Products.filter((product: any) => {
+                return product.name.toLowerCase().includes(text.toLowerCase())
+            })
+            setSearchResult(tmpList)
+        } else {
+            setSearchControl(false)
+            setSearchResult(Products)
+        }
     }
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
@@ -79,6 +94,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
             .then((data) => {
                 if (ProductsCategory === 'all') {
                     setProducts(data)
+                    setSearchResult(data)
                 } else {
                     let category = ProductsCategory.toLowerCase().replaceAll('-', ' ')
                     let tmpList:any = []
@@ -88,6 +104,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
                         }
                     });
                     setProducts(tmpList)
+                    setSearchResult(tmpList)
                 }
             })
     }
@@ -136,7 +153,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
                         zIndex={0}
                         children={<SearchIcon color='gray.400' />}
                     />
-                    <Input type='text' placeholder='Search' />
+                    <Input onChange={(e) => searchHandler(e.target.value)} type='text' placeholder='Search' />
                 </InputGroup>
             </Stack>
             {
@@ -149,7 +166,7 @@ const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
                         paddingLeft={'3%'}
                         paddingRight={'3%'}
                     >
-                        {Products.map((p:any, i) => (
+                        {searchResult.map((p:any, i) => (
                             <Box
                                 bgColor={'gray.200'}
                                 borderRadius={'10px'}
