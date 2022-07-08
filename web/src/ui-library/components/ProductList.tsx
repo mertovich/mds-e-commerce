@@ -167,8 +167,8 @@ const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
                         {searchResult.map((p: any, i) => (
                             <VStack
                                 key={i}
-                                backgroundColor='gray.200'
-
+                                shadow='xl'
+                                marginTop={'10%'}
                             >
                                 <Image
                                     src={p.image}
