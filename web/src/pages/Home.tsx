@@ -10,6 +10,7 @@ type Props = {}
 const Home = (props: Props) => {
   const [user, setUser] = useState<boolean | null>(false)
   const [login, setLogin] = useState<boolean>(false)
+  const [ProductsCategory, setProductsCategory] = useState<string>('all')
 
   useEffect(() => {
     userControl()
@@ -40,7 +41,7 @@ const Home = (props: Props) => {
         {
           user ? <UserNavBar /> : <NavBar />
         }
-        <ProductList />
+        <ProductList ProductsCategory={ProductsCategory}/>
       </Skeleton>
     </div>
   )

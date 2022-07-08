@@ -19,9 +19,12 @@ import { SearchIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-type Props = {}
+interface IProps {
+    ProductsCategory: string
+}
 
-const ProductList = (props: Props) => {
+const ProductList:React.FC<IProps> = ({ProductsCategory}) => {
+
     const [Loaded, setLoaded] = useState<boolean>(true)
     const [User,SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [Products, setProducts] = useState<any[]>([])
@@ -74,7 +77,18 @@ const ProductList = (props: Props) => {
         fetch(`${config.api_url}/api/products`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                setProducts(data)
+                if (ProductsCategory === 'all') {
+                    setProducts(data)
+                } else {
+                    let category = ProductsCategory.toLowerCase().replaceAll('-', ' ')
+                    let tmpList:any = []
+                    data.forEach((product:any) => {
+                        if(product.category === category) {
+                            tmpList.push(product)
+                        }
+                    });
+                    setProducts(tmpList)
+                }
             })
     }
 
@@ -139,6 +153,7 @@ const ProductList = (props: Props) => {
                             <Box
                                 bgColor={'gray.200'}
                                 borderRadius={'10px'}
+                                key={i}
                             >
                                 <Box
                                     width={'100%'}
