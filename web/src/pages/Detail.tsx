@@ -28,7 +28,7 @@ const Detail = (props: Props) => {
         getProduct()
     }, [])
 
-    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
         toast({
             title: title,
             description: message,
@@ -52,8 +52,8 @@ const Detail = (props: Props) => {
         fetch(`${config.api_url}/api/customer/product-buy`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                if(data.message == 'success') {
-                    toastMessage('Success', 'You have successfully buy product', 'success', 3000,'bottom-right')
+                if (data.message == 'success') {
+                    toastMessage('Success', 'You have successfully buy product', 'success', 3000, 'bottom-right')
                 }
             })
     }
@@ -95,7 +95,7 @@ const Detail = (props: Props) => {
                 <UserNavBar />
                 <HStack>
                     <VStack
-                        h={'90vh'}
+                        h={'91vh'}
                         backgroundColor={'gray.400'}
                         w={'50%'}
                     >
@@ -133,7 +133,7 @@ const Detail = (props: Props) => {
                         </Box>
                         <Box
                             overflow={'auto'}
-                            height={'20vh'}
+                            height={'10vh'}
                         >
                             <Text
                                 fontSize={'xl'}
@@ -144,29 +144,36 @@ const Detail = (props: Props) => {
                                 {product.description}
                             </Text>
                         </Box>
-                        {
-                            comments && comments.map((comment: any) => {
-                                return (
-                                    <Box
-                                        key={comment.id}
-                                        overflow={'auto'}
-                                        height={'15vh'}
-                                        backgroundColor={'gray.100'}
-                                    >
-                                        <Text
-                                            fontSize={'xl'}
-                                            color={'gray.600'}
+                        {comments.length > 0 ? <Text>Comments ({comments.length})</Text> : null}
+                        <Box
+                            overflow={'auto'}
+                            height={'20vh'}
+                            padding={'2'}
+                        >
+                            {
+                                comments && comments.map((comment: any) => {
+                                    return (
+                                        <Box
+                                            key={comment.id}
+                                            backgroundColor={'white.100'}
+                                            padding={'2'}
+                                            shadow={'md'}
                                         >
-                                            {comment.name} {comment.surname}
-                                        </Text>
-                                        <Text>
-                                            {comment.description}
-                                        </Text>
-                                    </Box>
+                                            <Text
+                                                fontSize={'xl'}
+                                                color={'gray.600'}
+                                            >
+                                                {comment.name} {comment.surname}
+                                            </Text>
+                                            <Text>
+                                                {comment.description}
+                                            </Text>
+                                        </Box>
+                                    )
+                                }
                                 )
                             }
-                            )
-                        }
+                        </Box>
                         <HStack
                             justifyContent={'center'}
                             marginTop={'10'}
