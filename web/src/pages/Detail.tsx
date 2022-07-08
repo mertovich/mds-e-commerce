@@ -18,7 +18,7 @@ const Detail = (props: Props) => {
     const [loading, setLoading] = useState(false)
     const [product, setProduct] = useState<any>({})
     const [comments, setComments] = useState<any>([])
-    const [user, setUser] = useState<any>({})
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
 
     const { id } = useParams()
     const toast = useToast()
@@ -26,7 +26,6 @@ const Detail = (props: Props) => {
 
     useEffect(() => {
         getProduct()
-        getUser()
     }, [])
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number=9000,positionValue:any='top-right') => {
@@ -39,13 +38,6 @@ const Detail = (props: Props) => {
             isClosable: true,
         })
     }
-
-    const getUser= () => {
-        let usr = localStorage.getItem('user')
-          if(usr){
-              setUser(JSON.parse(usr))
-          }
-     }
 
     const productBuy = (product: any) => {
         const requestOptions = {
