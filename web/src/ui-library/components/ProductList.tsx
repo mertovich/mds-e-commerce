@@ -23,7 +23,7 @@ type Props = {}
 
 const ProductList = (props: Props) => {
     const [Loaded, setLoaded] = useState<boolean>(true)
-    const [User,SetUser] = useState<any>({})
+    const [User,SetUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [Products, setProducts] = useState<any[]>([])
 
     const toast = useToast()
@@ -47,15 +47,7 @@ const ProductList = (props: Props) => {
 
     useEffect(() => {
         getProductsList()
-        getUser()
     }, [])
-
-    const getUser= () => {
-       let usr = localStorage.getItem('user')
-         if(usr){
-             SetUser(JSON.parse(usr))
-         }
-    }
 
     const getProductsList = async () => {
         const requestOptions = {

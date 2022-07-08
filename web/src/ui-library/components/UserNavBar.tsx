@@ -45,17 +45,13 @@ interface User {
 
 
 const UserNavBar = (props: Props) => {
-    const [user, setUser] = useState<User>({} as User)
+    const [user, setUser] = useState<User>(JSON.parse(localStorage.getItem('user') || '{}'))
     const [addProductControl, setAddProductcontrol] = useState<boolean>(true)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [basketList, setBasketList] = useState<object[]>([])
 
     const navigate = useNavigate()
     const btnRef = React.useRef(null)
-
-    useEffect(() => {
-        getUser()
-    }, [])
 
     const deleteAllItem = () => {
         setBasketList([])
@@ -73,15 +69,6 @@ const UserNavBar = (props: Props) => {
         let tmpList = localStorage.getItem('basketList')
         if (tmpList) {
             setBasketList(JSON.parse(tmpList))
-        }
-    }
-
-    const getUser = async () => {
-        const usr = localStorage.getItem('user')
-        if (usr) {
-            const usrObj: User = JSON.parse(usr)
-            setUser(usrObj)
-            await getUserType()
         }
     }
 

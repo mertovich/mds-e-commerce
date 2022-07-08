@@ -26,7 +26,7 @@ const SettingsForm = (props: Props) => {
   const [surnameControl, setSurnameControl] = useState<boolean>(true)
   const [passwordControl, setPasswordControl] = useState<boolean>(true)
   const [emailControl, setEmailControl] = useState<boolean>(true)
-  const [user, setUser] = useState<any>({})
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
 
   const toast = useToast()
   const config = require('../../config.json')

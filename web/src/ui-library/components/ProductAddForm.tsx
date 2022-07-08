@@ -24,7 +24,7 @@ const ProductAddForm = (props: Props) => {
   const [description, setDescription] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
-  const [user, setUser] = useState<any>({})
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
 
   const config = require('../../config.json')
   const toast = useToast()
@@ -39,17 +39,8 @@ const ProductAddForm = (props: Props) => {
     })
   }
 
-  useEffect(() => {
-    getUser()
-  }, [])
-
   const submithandler = () => {
     validate()
-  }
-
-  const getUser = () => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}')
-    setUser(user)
   }
 
   const validate = () => {
