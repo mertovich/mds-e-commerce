@@ -64,3 +64,24 @@ func CompanyAddProduct(p models.Product) {
 	companyJson, _ := json.Marshal(companies)
 	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
 }
+
+func CompanyGetId(id string) models.Company {
+	companies := GetCompanies()
+	for _, company := range companies {
+		if company.ID == id {
+			return company
+		}
+	}
+	return models.Company{}
+}
+
+func UpdateCompany(c models.Company) {
+	companies := GetCompanies()
+	for i, company := range companies {
+		if company.ID == c.ID {
+			companies[i] = c
+		}
+	}
+	companyJson, _ := json.Marshal(companies)
+	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
+}
