@@ -19,6 +19,8 @@ const Detail = (props: Props) => {
     const [product, setProduct] = useState<any>({})
     const [comments, setComments] = useState<any>([])
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
+    const [userType, setUserType] = useState<string>('customer')
+
 
     const { id } = useParams()
     const toast = useToast()
@@ -26,7 +28,22 @@ const Detail = (props: Props) => {
 
     useEffect(() => {
         getProduct()
+        getUserType()
     }, [])
+
+    const getUserType = () => {
+        const usr = localStorage.getItem('user')
+        if (usr) {
+            const usrObj = JSON.parse(usr)
+            if (usrObj.id[0] === '1') {
+                setUserType('customer')
+            } else if (usrObj.id[0] === '2') {
+                setUserType('company')
+            } else {
+                setUserType('')
+            }
+        }
+    }
 
     const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
         toast({
@@ -49,7 +66,7 @@ const Detail = (props: Props) => {
                 product: product
             }),
         }
-        fetch(`${config.api_url}/api/customer/product-buy`, requestOptions)
+        fetch(`${config.api_url}/api/${userType}/product-buy`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.message == 'success') {
