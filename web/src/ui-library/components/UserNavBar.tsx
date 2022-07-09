@@ -203,7 +203,7 @@ const UserNavBar = (props: Props) => {
                                 <Table variant='simple' size={'sm'}>
                                     <Thead>
                                         <Tr>
-                                            <Th></Th>
+                                            <Th>image</Th>
                                             <Th>Product Name</Th>
                                             <Th isNumeric>Price</Th>
                                             <Th></Th>
