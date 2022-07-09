@@ -11,6 +11,9 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import UserNavBar from '../ui-library/components/UserNavBar'
+import NavBar from '../ui-library/components/NavBar'
+import { authValidation } from '../auth/index'
+
 
 type Props = {}
 
@@ -20,6 +23,7 @@ const Detail = (props: Props) => {
     const [comments, setComments] = useState<any>([])
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
     const [userType, setUserType] = useState<string>('customer')
+    const [userControl, setuserControl] = useState<boolean | null>(false)
 
 
     const { id } = useParams()
@@ -29,7 +33,22 @@ const Detail = (props: Props) => {
     useEffect(() => {
         getProduct()
         getUserType()
+        userLoginControl()
     }, [])
+
+    const userLoginControl = async () => {
+        let token = localStorage.getItem('token')
+        if (token) {
+            let user = await authValidation(token)
+            if (user) {
+                setuserControl(user)
+            } else {
+                setuserControl(false)
+            }
+        } else {
+            setuserControl(false)
+        }
+    }
 
     const getUserType = () => {
         const usr = localStorage.getItem('user')
@@ -109,7 +128,9 @@ const Detail = (props: Props) => {
     return (
         <Box>
             <Skeleton isLoaded={loading}  >
-                <UserNavBar />
+                {
+                    userControl ? <UserNavBar /> : <NavBar />
+                }
                 <HStack>
                     <VStack
                         h={'91vh'}
