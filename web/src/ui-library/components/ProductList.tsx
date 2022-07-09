@@ -108,7 +108,6 @@ const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
 
     const addToBasket = (product: any) => {
         let tmpList = localStorage.getItem('basketList')
-        console.log(product)
         if (tmpList) {
             let basketList = JSON.parse(tmpList)
             basketList.push(product)
@@ -118,6 +117,7 @@ const ProductList: React.FC<IProps> = ({ ProductsCategory }) => {
             basketList.push(product)
             localStorage.setItem('basketList', JSON.stringify(basketList))
         }
+        toastMessage('Success', 'Product added to basket', 'success', 3000, 'top-right')
     }
 
     const productBuy = (product: any) => {
