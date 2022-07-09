@@ -81,7 +81,6 @@ const SettingsForm = (props: Props) => {
     fetch(`${config.api_url}/api/user/update`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         if (data.message === 'Success') {
           toastMessage('Success', 'User updated successfully', 'success', 3000, 'top-right')
           localStorage.setItem('token', data.token)

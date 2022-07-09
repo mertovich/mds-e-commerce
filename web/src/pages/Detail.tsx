@@ -96,7 +96,6 @@ const Detail = (props: Props) => {
 
     const addToBasket = (product: any) => {
         let tmpList = localStorage.getItem('basketList')
-        console.log(product)
         if (tmpList) {
             let basketList = JSON.parse(tmpList)
             basketList.push(product)
