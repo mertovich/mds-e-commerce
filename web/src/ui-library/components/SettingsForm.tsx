@@ -11,6 +11,12 @@ import {
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
+import {
+  nameValidation,
+  surnameValidation,
+  emailValidation,
+  passwordValidation,
+} from '../../utils/ValidationForm'
 
 type Props = {}
 
@@ -22,10 +28,6 @@ const SettingsForm = (props: Props) => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('')
-  const [nameControl, setNameControl] = useState<boolean>(true)
-  const [surnameControl, setSurnameControl] = useState<boolean>(true)
-  const [passwordControl, setPasswordControl] = useState<boolean>(true)
-  const [emailControl, setEmailControl] = useState<boolean>(true)
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'))
 
   const toast = useToast()
@@ -47,11 +49,27 @@ const SettingsForm = (props: Props) => {
   }
 
   const handleSubmit = () => {
-    nameAndSurnameValidation()
-    emailValidation()
-    if (nameControl && surnameControl && passwordValidation() && emailControl) {
+    const nameValidationResult = nameValidation(name)
+    const surnameValidationResult = surnameValidation(surname)
+    const emailValidationResult = emailValidation(email)
+    const passwordValidationResult = passwordValidation(password, passwordConfirmation)
+
+    if (!nameValidationResult) {
+      toastMessage('error', 'name required Must be greater than 3 characters and less than 20 characters', 'error', 3000, 'top-right')
+    }
+    if (!surnameValidationResult) {
+      toastMessage('error', 'surname required Must be greater than 3 characters and less than 20 characters', 'error', 3000, 'top-right')
+    }
+    if (!emailValidationResult) {
+      toastMessage('error', 'email required Must be valid email', 'error', 3000, 'top-right')
+    }
+    if (!passwordValidationResult) {
+      toastMessage('error', 'password required Must be greater than 6 characters and less than 20 characters', 'error', 3000, 'top-right')
+    }
+    if (nameValidationResult && surnameValidationResult && emailValidationResult && passwordValidationResult) {
       update()
     }
+
   }
 
   const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
@@ -90,101 +108,6 @@ const SettingsForm = (props: Props) => {
       })
   }
 
-  const nameAndSurnameValidation = () => {
-    if (name.length <= 2) {
-      setNameControl(false)
-      toastMessage('Name Error', 'Name must be at least 3 characters long')
-    }
-    if (surname.length <= 2) {
-      setSurnameControl(false)
-      toastMessage('Surname Error', 'Surname must be at least 3 characters long')
-    }
-    if (name.length > 15) {
-      setNameControl(false)
-      toastMessage('Name Error', 'Name must be less than 15 characters long')
-    }
-    if (surname.length > 15) {
-      setSurnameControl(false)
-      toastMessage('Surname Error', 'Surname must be less than 15 characters long')
-    }
-    if (name.length > 2 && surname.length > 2 && name.length < 15 && surname.length < 15) {
-      setNameControl(true)
-    }
-    if (name.length >= 3 && name.length <= 15) {
-      setNameControl(true)
-    }
-    if (surname.length >= 3 && surname.length <= 15) {
-      setSurnameControl(true)
-    }
-    if (name === "") {
-      setNameControl(true)
-      setName(user.name)
-    }
-    if (surname === "") {
-      setSurnameControl(true)
-      setSurname(user.surname)
-    }
-  }
-
-  const emailValidation = () => {
-    if (email.length <= 5) {
-      setEmailControl(false)
-      toastMessage('Email Error', 'Email must be at least 6 characters long')
-    }
-    if (email.length > 20) {
-      setEmailControl(false)
-      toastMessage('Email Error', 'Email must be less than 20 characters long')
-    }
-    if (!email.includes('@')) {
-      setEmailControl(false)
-      toastMessage('Email Error', 'Email must contain @')
-    }
-    if (!email.includes('.')) {
-      setEmailControl(false)
-      toastMessage('Email Error', 'Email must contain .')
-    }
-    if (email.length >= 6 && email.length <= 20 && email.includes('@') && email.includes('.')) {
-      setEmailControl(true)
-    }
-    if (email === "") {
-      setEmailControl(true)
-      setEmail(user.email)
-    }
-
-  }
-
-  const passwordValidation = (): boolean => {
-    if (password.length <= 5) {
-      setPasswordControl(false)
-      toastMessage('Password Error', 'Password must be at least 6 characters long')
-      return false
-    }
-    if (password.length > 20) {
-      setPasswordControl(false)
-      toastMessage('Password Error', 'Password must be less than 20 characters long')
-      return false
-    }
-    if (passwordConfirmation.length <= 5) {
-      setPasswordControl(false)
-      toastMessage('Password Confirmation Error', 'Password Confirmation must be at least 6 characters long')
-      return false
-    }
-    if (passwordConfirmation.length > 20) {
-      setPasswordControl(false)
-      toastMessage('Password Confirmation Error', 'Password Confirmation must be less than 20 characters long')
-      return false
-    }
-    if (password !== passwordConfirmation) {
-      setPasswordControl(false)
-      toastMessage('Password Confirmation Error', 'Password Confirmation must be the same as Password')
-      return false
-    }
-    if (password.length >= 6 && password.length <= 20 && password.match(passwordConfirmation) && passwordConfirmation.length >= 6 && passwordConfirmation.length <= 20) {
-      setPasswordControl(true)
-      return true
-    }
-    return false
-  }
 
   return (
     <Box
@@ -203,20 +126,17 @@ const SettingsForm = (props: Props) => {
         <HStack
           marginTop={2}>
           <Input
-            isInvalid={!nameControl}
             onChange={(e) => setName(e.target.value)}
             variant='outline'
             type={'text'}
             placeholder={`${user.name}`} />
           <Input
-            isInvalid={!surnameControl}
             onChange={(e) => setSurname(e.target.value)}
             variant='outline'
             placeholder={`${user.surname}`} />
         </HStack>
         <VStack>
           <Input
-            isInvalid={!emailControl}
             onChange={(e) => setEmail(e.target.value)}
             variant='outline'
             marginTop={4}
@@ -227,7 +147,6 @@ const SettingsForm = (props: Props) => {
             size='md'>
             <Input
               pr='4.5rem'
-              isInvalid={!passwordControl}
               type={show ? 'text' : 'password'}
               placeholder='Enter password'
               onChange={(e) => setPassword(e.target.value)}
@@ -243,7 +162,6 @@ const SettingsForm = (props: Props) => {
             size='md'>
             <Input
               pr='4.5rem'
-              isInvalid={!passwordControl}
               type={show ? 'text' : 'password'}
               placeholder='Password confirmation'
               onChange={(e) => setPasswordConfirmation(e.target.value)}
