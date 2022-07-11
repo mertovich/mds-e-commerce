@@ -13,6 +13,7 @@ import {
   InputLeftAddon,
   Select,
   useToast,
+  Textarea,
 } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 
@@ -80,8 +81,6 @@ const ProductAddForm = (props: Props) => {
       )
   }
 
-
-
   return (
     <Box>
       <Box
@@ -97,7 +96,7 @@ const ProductAddForm = (props: Props) => {
         >
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder='Product Name' />
           <Input value={imageLink} onChange={(e) => setImageLink(e.target.value)} placeholder='Product image link' />
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Product Description' />
+          <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Product Description' />
           <Select value={category} onChange={(e) => setCategory(e.target.value)} placeholder='Category'>
             <option value='table'>Table</option>
             <option value='chair'>Chair</option>
