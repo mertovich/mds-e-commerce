@@ -118,6 +118,10 @@ const UserNavBar = (props: Props) => {
         navigate('/product-add')
     }
 
+    const goToMyProductList = () => {
+        navigate('/my-products')
+    }
+
     return (
         <Box
             as="nav"
@@ -244,7 +248,7 @@ const UserNavBar = (props: Props) => {
                             Total: £{basketList.reduce((acc: number, item: any) => acc + item.price, 0)}
                         </Text>
                         <ModalFooter>
-                        <Button
+                            <Button
                                 colorScheme={'red'}
                                 variant='solid'
                                 margin={2}
@@ -268,6 +272,7 @@ const UserNavBar = (props: Props) => {
                     <MenuList>
                         <MenuGroup textAlign={'start'} title={`${user.name} ${user.surname}`} >
                             <MenuItem onClick={() => goToAddProduct()} hidden={addProductControl} >Add Product</MenuItem>
+                            <MenuItem onClick={() => goToMyProductList()} hidden={addProductControl} >My Product List</MenuItem>
                             <MenuItem onClick={() => gotoPurchaseHistory()} >Purchase history</MenuItem>
                             <MenuItem onClick={() => gotoSettings()} >Settings</MenuItem>
                             <MenuItem onClick={() => logout()} >Logout</MenuItem>
