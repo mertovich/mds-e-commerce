@@ -125,7 +125,7 @@ const HistoryList = (props: Props) => {
                                 <Tr key={index}>
                                     <Td>{item.name}</Td>
                                     <Td>{item.seller}</Td>
-                                    <Td isNumeric>{item.price}</Td>
+                                    <Td isNumeric>{`£${item.price}`}</Td>
                                     <Td
                                         textAlign={'center'}
                                     >
