@@ -42,11 +42,11 @@ const MyProductList = (props: Props) => {
         <Box>
             <TableContainer>
                 <Table variant={'striped'} colorScheme='blue'>
-                    <TableCaption>Purchase History</TableCaption>
+                    <TableCaption>My Product List</TableCaption>
                     <Thead>
                         <Tr>
                             <Th>Product Name</Th>
-                            <Th>Seller</Th>
+                            <Th>Created at</Th>
                             <Th isNumeric>Price</Th>
                             <Th></Th>
                         </Tr>
@@ -60,8 +60,8 @@ const MyProductList = (props: Props) => {
                                             {`${(item.name).slice(0,20)}...`}
                                         </Tooltip>
                                     </Td>
-                                    <Td>{item.seller}</Td>
-                                    <Td isNumeric>{item.price}</Td>
+                                    <Td>{item.created_at.slice(0,10)}</Td>
+                                    <Td isNumeric>{`£${item.price}`}</Td>
                                     <Td
                                         textAlign={'center'}
                                     >
