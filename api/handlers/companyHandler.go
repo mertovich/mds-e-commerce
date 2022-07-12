@@ -135,3 +135,34 @@ func CompanyProductPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func CompanyProductList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/company/product-list" {
+		http.NotFound(w, r)
+		return
+	}
+
+	type User struct {
+		ID    string `json:"id"`
+		Token string `json:"token"`
+	}
+
+	var user User
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(bodyByte, &user)
+	authValid := auth.Auth(user.Token)
+	if authValid == true {
+		productList := datamanager.GetCompanyProductList(user.ID)
+		productListJSON, _ := json.Marshal(productList)
+		fmt.Fprintf(w, string(productListJSON))
+	} else {
+		fmt.Println("Invalid token")
+		maps := map[string]string{"message": "Invalid token"}
+		mapsJson, _ := json.Marshal(maps)
+		fmt.Fprintf(w, string(mapsJson))
+		return
+	}
+}
