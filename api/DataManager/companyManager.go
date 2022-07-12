@@ -85,3 +85,13 @@ func UpdateCompany(c models.Company) {
 	companyJson, _ := json.Marshal(companies)
 	ioutil.WriteFile(dataPathCompanies, companyJson, 0644)
 }
+
+func GetCompanyProductList(id string) []models.Product {
+	companies := GetCompanies()
+	for _, company := range companies {
+		if company.ID == id {
+			return company.Products
+		}
+	}
+	return nil
+}
