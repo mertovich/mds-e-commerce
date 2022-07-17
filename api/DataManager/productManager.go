@@ -49,3 +49,15 @@ func AddProductComment(id string, c models.Comment) {
 	product.Comments = append(product.Comments, c)
 	UpdateProduct(product)
 }
+
+func ProductRemoveItem(id string) {
+	products := GetProducts()
+	tmpProducts := []models.Product{}
+	for _, product := range products {
+		if product.ID != id {
+			tmpProducts = append(tmpProducts, product)
+		}
+	}
+	tmpProductsJson, _ := json.Marshal(tmpProducts)
+	ioutil.WriteFile(dataPathProducts, tmpProductsJson, 0644)
+}
