@@ -95,3 +95,15 @@ func GetCompanyProductList(id string) []models.Product {
 	}
 	return nil
 }
+
+func RemoveProductCompany(id string, productId string) {
+	company := CompanyGetId(id)
+	companyProductList := []models.Product{}
+	for _, product := range company.Products {
+		if product.ID != productId {
+			companyProductList = append(companyProductList, product)
+		}
+	}
+	company.Products = companyProductList
+	UpdateCompany(company)
+}
