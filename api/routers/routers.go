@@ -19,4 +19,5 @@ func Inıt() {
 	http.HandleFunc("/api/product/", handlers.GetProductId)
 	http.HandleFunc("/api/product-comment", handlers.AddProductComment)
 	http.HandleFunc("/api/company/product-list", handlers.CompanyProductList)
+	http.HandleFunc("/api/product-remove", handlers.RemoveItemProductList)
 }
