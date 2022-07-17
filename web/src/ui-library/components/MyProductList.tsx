@@ -18,6 +18,9 @@ type Props = {}
 const MyProductList = (props: Props) => {
     const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('user') || '{}'))
     const [productList, setProductList] = useState<any>([])
+
+    const config = require('../../config')
+
     useEffect(() => {
         getProducts()
     }, [])
@@ -31,10 +34,27 @@ const MyProductList = (props: Props) => {
                 token: localStorage.getItem('token')
             })
         };
-        fetch('http://localhost:8080/api/company/product-list', requestOptions)
+        fetch(`${config.api_url}/api/company/product-list`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setProductList(data)
+            })
+    }
+
+    const deleteProduct = (id: string) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                product_id: id,
+                id: user.id,
+                token: localStorage.getItem('token')
+        })};
+        fetch(`${config.api_url}/api/product-remove`, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                getProducts()
+                console.log(data)
             })
     }
 
@@ -67,7 +87,7 @@ const MyProductList = (props: Props) => {
                                     >
                                         <Button
                                             size={'sm'}
-                                            onClick={() => { }}
+                                            onClick={() => deleteProduct(item.id)}
                                             colorScheme={"red"}
                                         >
                                             Delete
