@@ -75,3 +75,34 @@ func AddProductComment(w http.ResponseWriter, r *http.Request) {
 	responseJSON, _ := json.Marshal(responeMap)
 	fmt.Fprintf(w, string(responseJSON))
 }
+
+func RemoveItemProductList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.URL.Path != "/api/product-remove" {
+		http.NotFound(w, r)
+	}
+
+	type User struct {
+		ID        string `json:"id"`
+		ProductId string `json:"product_id"`
+		Token     string `json:"token"`
+	}
+
+	bodyByte, _ := ioutil.ReadAll(r.Body)
+	var user User
+	json.Unmarshal(bodyByte, &user)
+
+	authvalid := auth.Auth(user.Token)
+	if authvalid == false {
+		fmt.Fprint(w, "Invalid token")
+	}
+
+	datamanager.ProductRemoveItem(user.ProductId)
+	datamanager.RemoveProductCompany(user.ID, user.ProductId)
+
+	responeMap := map[string]string{"message": "success"}
+	responseJSON, _ := json.Marshal(responeMap)
+	fmt.Fprintf(w, string(responseJSON))
+}
