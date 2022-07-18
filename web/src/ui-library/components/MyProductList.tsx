@@ -11,6 +11,14 @@ import {
     Tbody,
     Td,
     Tooltip,
+    useDisclosure,
+    AlertDialog,
+    AlertDialogOverlay,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogCloseButton,
 } from '@chakra-ui/react'
 
 type Props = {}
@@ -18,12 +26,21 @@ type Props = {}
 const MyProductList = (props: Props) => {
     const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('user') || '{}'))
     const [productList, setProductList] = useState<any>([])
+    const [productId, setProductId] = useState<string>('')
 
     const config = require('../../config')
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef(null)
+
 
     useEffect(() => {
         getProducts()
     }, [])
+
+    const alertButtonHandler = (id: string) => {
+        onOpen()
+        setProductId(id)
+    }
 
     const getProducts = () => {
         const requestOptions = {
@@ -49,7 +66,8 @@ const MyProductList = (props: Props) => {
                 product_id: id,
                 id: user.id,
                 token: localStorage.getItem('token')
-        })};
+            })
+        };
         fetch(`${config.api_url}/api/product-remove`, requestOptions)
             .then(response => response.json())
             .then(data => {
@@ -77,17 +95,17 @@ const MyProductList = (props: Props) => {
                                 <Tr key={item.id}>
                                     <Td>
                                         <Tooltip label={`${item.name}`}>
-                                            {`${(item.name).slice(0,20)}...`}
+                                            {`${(item.name).slice(0, 20)}...`}
                                         </Tooltip>
                                     </Td>
-                                    <Td>{item.created_at.slice(0,10)}</Td>
+                                    <Td>{item.created_at.slice(0, 10)}</Td>
                                     <Td isNumeric>{`£${item.price}`}</Td>
                                     <Td
                                         textAlign={'center'}
                                     >
                                         <Button
                                             size={'sm'}
-                                            onClick={() => deleteProduct(item.id)}
+                                            onClick={() => alertButtonHandler(item.id)}
                                             colorScheme={"red"}
                                         >
                                             Delete
@@ -100,7 +118,38 @@ const MyProductList = (props: Props) => {
                     </Tbody>
                 </Table>
             </TableContainer>
-        </Box>
+            <AlertDialog
+                motionPreset='slideInBottom'
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isOpen={isOpen}
+                isCentered
+            >
+                <AlertDialogOverlay />
+
+                <AlertDialogContent>
+                    <AlertDialogHeader>Delete product</AlertDialogHeader>
+                    <AlertDialogCloseButton />
+                    <AlertDialogBody>
+                        {`Are you sure you want to delete the product ?`}
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onClose}>
+                            No
+                        </Button>
+                        <Button
+                            colorScheme='red' ml={3}
+                            onClick={() => {
+                                deleteProduct(productId)
+                                onClose()
+                            }}
+                        >
+                            Yes
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </Box >
     )
 }
 
