@@ -8,9 +8,9 @@ func AddProductHistoryCustomer(p []models.Product, id string) {
 	UpdateCustomer(c)
 }
 
-func AddProductHistoryCompany(p models.Product, id string) {
+func AddProductHistoryCompany(p []models.Product, id string) {
 	c := CompanyGetId(id)
-	c.PurchaseHistory = append(c.PurchaseHistory, p)
+	c.PurchaseHistory = append(c.PurchaseHistory, p...)
 	UpdateCompany(c)
 }
 
