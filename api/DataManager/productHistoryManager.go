@@ -2,10 +2,16 @@ package datamanager
 
 import "api/models"
 
-func AddProductHistoryCustomer(p models.Product, id string) {
+func AddProductHistoryCustomer(p []models.Product, id string) {
 	c := GetCustomer(id)
-	c.PurchaseHistory = append(c.PurchaseHistory, p)
+	c.PurchaseHistory = append(c.PurchaseHistory, p...)
 	UpdateCustomer(c)
+}
+
+func AddProductHistoryCompany(p models.Product, id string) {
+	c := CompanyGetId(id)
+	c.PurchaseHistory = append(c.PurchaseHistory, p)
+	UpdateCompany(c)
 }
 
 func GetCustomerPurchaseHistory(id string) []models.Product {
@@ -18,8 +24,12 @@ func GetCustomerPurchaseHistory(id string) []models.Product {
 	return nil
 }
 
-func AddProductHistoryCompany(p models.Product, id string) {
-	c := CompanyGetId(id)
-	c.PurchaseHistory = append(c.PurchaseHistory, p)
-	UpdateCompany(c)
+func GetCompanyPurchaseHistory(id string) []models.Product {
+	companies := GetCompanies()
+	for _, company := range companies {
+		if company.ID == id {
+			return company.PurchaseHistory
+		}
+	}
+	return nil
 }

@@ -43,16 +43,6 @@ func UpdateCompanyPersonal(id string, name string, surname string, email string,
 	return tk
 }
 
-func GetCompanyPurchaseHistory(id string) []models.Product {
-	companies := GetCompanies()
-	for _, company := range companies {
-		if company.ID == id {
-			return company.PurchaseHistory
-		}
-	}
-	return nil
-}
-
 func CompanyAddProduct(p models.Product) {
 	companies := GetCompanies()
 	for i, company := range companies {
