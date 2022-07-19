@@ -17,15 +17,8 @@ import {
     ModalCloseButton,
     ModalBody,
     ModalFooter,
-    TableContainer,
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Tbody,
-    Td,
     Image,
-    VStack,
+    useToast,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -50,9 +43,12 @@ const UserNavBar = (props: Props) => {
     const [addProductControl, setAddProductcontrol] = useState<boolean>(true)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [basketList, setBasketList] = useState<object[]>([])
+    const [userType, setUserType] = useState<string>('customer')
 
     const navigate = useNavigate()
     const btnRef = React.useRef(null)
+    const toast = useToast()
+    const config = require('../../config.json')
 
     useEffect(() => {
         getUserType()
@@ -88,12 +84,47 @@ const UserNavBar = (props: Props) => {
             const usrObj: User = JSON.parse(usr)
             if (usrObj.id[0] === '1') {
                 setAddProductcontrol(true)
+                setUserType('customer')
             } else if (usrObj.id[0] === '2') {
                 setAddProductcontrol(false)
+                setUserType('company')
             } else {
                 setAddProductcontrol(true)
+                setUserType('')
             }
         }
+    }
+
+    const toastMessage = (title: string, message: string, statusType: any = 'error', durationValue: number = 9000, positionValue: any = 'top-right') => {
+        toast({
+            title: title,
+            description: message,
+            position: positionValue,
+            status: statusType,
+            duration: durationValue,
+            isClosable: true,
+        })
+    }
+
+    const productBuy = (products: any) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: user.id,
+                token: localStorage.getItem('token'),
+                product: products
+            }),
+        }
+        fetch(`${config.api_url}/api/${userType}/product-buy`, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === 'success') {
+                    toastMessage('Success', 'You have successfully buy product', 'success', 3000, 'bottom-right')
+                    deleteAllItem()
+                    onClose()
+                }
+            })
     }
 
     const logout = () => {
@@ -249,6 +280,7 @@ const UserNavBar = (props: Props) => {
                                 colorScheme={'green'}
                                 variant='solid'
                                 margin={2}
+                                onClick={() => productBuy(basketList)}
                             >Buy
                             </Button>
                             <Button onClick={onClose}>Close</Button>
