@@ -111,9 +111,9 @@ func CompanyProductBuy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type User struct {
-		ID      string         `json:"id"`
-		Token   string         `json:"token"`
-		Product models.Product `json:"product"`
+		ID      string           `json:"id"`
+		Token   string           `json:"token"`
+		Product []models.Product `json:"product"`
 	}
 
 	var user User
