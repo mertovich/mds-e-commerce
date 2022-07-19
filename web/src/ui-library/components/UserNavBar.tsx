@@ -25,6 +25,7 @@ import {
     Tbody,
     Td,
     Image,
+    VStack,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -203,43 +204,32 @@ const UserNavBar = (props: Props) => {
                         <ModalHeader>Basket</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            <TableContainer>
-                                <Table variant='simple' size={'sm'}>
-                                    <Thead>
-                                        <Tr>
-                                            <Th>image</Th>
-                                            <Th>Product Name</Th>
-                                            <Th isNumeric>Price</Th>
-                                            <Th></Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {basketList.map((item: any, index) => (
-                                            <Tr key={index}>
-                                                <Td>
-                                                    <Image
-                                                        src={item.image}
-                                                        alt='product iamge'
-                                                    />
-                                                </Td>
-                                                <Td>{item.name}</Td>
-                                                <Td isNumeric>£{item.price}</Td>
-                                                <Td>
-                                                    <Button
-                                                        onClick={() => removeBasketItem(index)}
-                                                        size={'sm'}
-                                                        colorScheme='red'
-                                                        variant='solid'
-                                                    >
-                                                        <Icon
-                                                            as={CloseIcon} />
-                                                    </Button>
-                                                </Td>
-                                            </Tr>
-                                        ))}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
+                            {basketList.map((item: any, index) => (
+                                <Box key={index}>
+                                    <HStack>
+                                        <Image
+                                            src={item.image}
+                                            alt='product image'
+                                            width={100}
+                                        />
+                                        <Text
+                                            textAlign={'justify'}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                        <Button
+                                            onClick={() => removeBasketItem(index)}
+                                            size={'sm'}
+                                            colorScheme='red'
+                                            variant='solid'
+                                            height={100}
+                                        >
+                                            <Icon
+                                                as={CloseIcon} />
+                                        </Button>
+                                    </HStack>
+                                </Box>
+                            ))}
                         </ModalBody>
                         <Text
                             fontSize={'xl'}
