@@ -41,7 +41,7 @@ func CustomerPurchaseHistoryGet(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func CustomerProductPost(w http.ResponseWriter, r *http.Request) {
+func CustomerProductBuy(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
@@ -51,9 +51,9 @@ func CustomerProductPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type User struct {
-		ID      string         `json:"id"`
-		Token   string         `json:"token"`
-		Product models.Product `json:"product"`
+		ID      string           `json:"id"`
+		Token   string           `json:"token"`
+		Product []models.Product `json:"product"`
 	}
 
 	var user User

@@ -101,7 +101,7 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func CompanyProductPost(w http.ResponseWriter, r *http.Request) {
+func CompanyProductBuy(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
