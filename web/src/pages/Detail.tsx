@@ -137,7 +137,7 @@ const Detail = (props: Props) => {
                         h={'91vh'}
                         w={'50%'}
                     >
-                        <Image h={'100vh'} src={product.image} alt="product" />
+                        <Image h={'90vh'} src={product.image} alt="product" />
                     </VStack>
                     <Box
                         padding={'5%'}
@@ -182,10 +182,13 @@ const Detail = (props: Props) => {
                                 {product.description}
                             </Text>
                         </Box>
+                        <Box
+                            marginTop={'5'}
+                        >
                         {comments.length > 0 ? <Text>Comments ({comments.length})</Text> : null}
                         <Box
                             overflow={'auto'}
-                            height={'5vh'}
+                            height={'15vh'}
                             padding={'2'}
                         >
                             {
@@ -211,6 +214,7 @@ const Detail = (props: Props) => {
                                 }
                                 )
                             }
+                        </Box>
                         </Box>
                         <HStack
                             justifyContent={'center'}
