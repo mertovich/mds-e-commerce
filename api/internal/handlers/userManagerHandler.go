@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"api/internal/auth"
-	"api/internal/datamanager"
+	"api/internal/dataManager"
+	"api/internal/jwt"
 	"api/internal/models"
-	"api/tools"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -35,7 +35,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 
 	if user.AccountType == "Customer" {
-		control := datamanager.RegisterControl(user.Email)
+		control := dataManager.RegisterControl(user.Email)
 		if !control {
 			tokenMap := map[string]string{
 				"token": "Email already exists",
@@ -45,16 +45,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		c := models.Customer{}
-		c.ID = tools.CreateId(user.AccountType)
+		c.ID = dataManager.CreateId(user.AccountType)
 		c.Name = user.Name
 		c.Surname = user.Surname
 		c.Email = user.Email
 		c.Password = user.Password
 		c.CreatedAt = time.Now().String()
 		c.PurchaseHistory = []models.Product{}
-		c.Token = tools.CreateTokenCustomer(c)
+		c.Token = jwt.CreateTokenCustomer(c)
 
-		datamanager.SaveCustomer(c)
+		dataManager.SaveCustomer(c)
 
 		tokenMap := map[string]string{
 			"token": c.Token,
@@ -62,7 +62,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		tokenJson, _ := json.Marshal(tokenMap)
 		fmt.Fprintf(w, string(tokenJson))
 	} else if user.AccountType == "Company" {
-		control := datamanager.RegisterControl(user.Email)
+		control := dataManager.RegisterControl(user.Email)
 		if !control {
 			tokenMap := map[string]string{
 				"token": "Email already exists",
@@ -72,7 +72,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		c := models.Company{}
-		c.ID = tools.CreateId(user.AccountType)
+		c.ID = dataManager.CreateId(user.AccountType)
 		c.Name = user.Name
 		c.Surname = user.Surname
 		c.Email = user.Email
@@ -80,9 +80,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		c.CreatedAt = time.Now().String()
 		c.Products = []models.Product{}
 		c.PurchaseHistory = []models.Product{}
-		c.Token = tools.CreateTokenCompany(c)
+		c.Token = jwt.CreateTokenCompany(c)
 
-		datamanager.SaveCompany(c)
+		dataManager.SaveCompany(c)
 
 		tokenMap := map[string]string{
 			"token": c.Token,
@@ -110,7 +110,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	json.Unmarshal(bodyByte, &user)
 
-	token := datamanager.Login(user.Email, user.Password)
+	token := dataManager.Login(user.Email, user.Password)
 
 	tokenMap := map[string]string{
 		"token": token,
@@ -174,7 +174,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if userTypeCustomer == 0 {
 		authValid := auth.Auth(user.Token)
 		if authValid == true {
-			newToken := datamanager.UpdateCustomerPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
+			newToken := dataManager.UpdateCustomerPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
 			maps := map[string]string{"message": "Success", "token": newToken}
 			mapsJson, _ := json.Marshal(maps)
 			fmt.Fprintf(w, string(mapsJson))
@@ -188,7 +188,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	} else if userTypeCompany == 0 {
 		authValid := auth.Auth(user.Token)
 		if authValid == true {
-			newToken := datamanager.UpdateCompanyPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
+			newToken := dataManager.UpdateCompanyPersonal(user.ID, user.Name, user.Surname, user.Email, user.Password)
 			maps := map[string]string{"message": "Success", "token": newToken}
 			mapsJson, _ := json.Marshal(maps)
 			fmt.Fprintf(w, string(mapsJson))

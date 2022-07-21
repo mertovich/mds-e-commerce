@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"api/internal/auth"
-	"api/internal/datamanager"
+	"api/internal/dataManager"
 	"api/internal/models"
 	"encoding/json"
 	"fmt"
@@ -28,7 +28,7 @@ func CustomerPurchaseHistoryGet(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
-		purchaseHistory := datamanager.GetCustomerPurchaseHistory(user.ID)
+		purchaseHistory := dataManager.GetCustomerPurchaseHistory(user.ID)
 		maps := map[string]interface{}{"message": "Success", "purchase_history": purchaseHistory}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))
@@ -62,7 +62,7 @@ func CustomerProductBuy(w http.ResponseWriter, r *http.Request) {
 
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
-		datamanager.AddProductHistoryCustomer(user.Product, user.ID)
+		dataManager.AddProductHistoryCustomer(user.Product, user.ID)
 		maps := map[string]string{"message": "success"}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))

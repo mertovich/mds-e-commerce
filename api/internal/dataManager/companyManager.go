@@ -1,8 +1,8 @@
-package datamanager
+package dataManager
 
 import (
 	"api/internal/models"
-	"api/tools"
+	"api/internal/jwt"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -33,7 +33,7 @@ func UpdateCompanyPersonal(id string, name string, surname string, email string,
 			companies[i].Email = email
 			companies[i].Password = password
 			tmp := companies[i]
-			companies[i].Token = tools.CreateTokenCompany(tmp)
+			companies[i].Token = jwt.CreateTokenCompany(tmp)
 			tk = companies[i].Token
 		}
 	}

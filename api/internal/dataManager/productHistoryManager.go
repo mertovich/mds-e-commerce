@@ -1,4 +1,4 @@
-package datamanager
+package dataManager
 
 import "api/internal/models"
 

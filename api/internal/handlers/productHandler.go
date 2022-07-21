@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"api/internal/auth"
-	"api/internal/datamanager"
+	"api/internal/dataManager"
 	"api/internal/models"
 	"encoding/json"
 	"fmt"
@@ -20,7 +20,7 @@ func GetAllProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	products := datamanager.GetProducts()
+	products := dataManager.GetProducts()
 	productsJSON, _ := json.Marshal(products)
 	fmt.Fprintf(w, string(productsJSON))
 }
@@ -40,7 +40,7 @@ func GetProductId(w http.ResponseWriter, r *http.Request) {
 	// we only want the single item.
 	key := keys[0]
 
-	product := datamanager.GetProductId(key)
+	product := dataManager.GetProductId(key)
 	productJSON, _ := json.Marshal(product)
 	fmt.Fprintf(w, string(productJSON))
 }
@@ -69,7 +69,7 @@ func AddProductComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Invalid token")
 	}
 
-	datamanager.AddProductComment(user.ProductId, user.Comment)
+	dataManager.AddProductComment(user.ProductId, user.Comment)
 
 	responeMap := map[string]string{"message": "success"}
 	responseJSON, _ := json.Marshal(responeMap)
@@ -99,8 +99,8 @@ func RemoveItemProductList(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Invalid token")
 	}
 
-	datamanager.ProductRemoveItem(user.ProductId)
-	datamanager.RemoveProductCompany(user.ID, user.ProductId)
+	dataManager.ProductRemoveItem(user.ProductId)
+	dataManager.RemoveProductCompany(user.ID, user.ProductId)
 
 	responeMap := map[string]string{"message": "success"}
 	responseJSON, _ := json.Marshal(responeMap)

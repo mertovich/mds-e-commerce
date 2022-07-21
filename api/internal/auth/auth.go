@@ -1,10 +1,10 @@
 package auth
 
-import "api/internal/datamanager"
+import "api/internal/dataManager"
 
 func Auth(token string) bool {
-	customerList := datamanager.GetCustomers()
-	companyList := datamanager.GetCompanies()
+	customerList := dataManager.GetCustomers()
+	companyList := dataManager.GetCompanies()
 
 	for _, customer := range customerList {
 		if customer.Token == token {

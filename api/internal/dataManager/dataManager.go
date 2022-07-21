@@ -1,8 +1,31 @@
-package datamanager
+package dataManager
 
 import (
-	"api/tools"
+	"api/internal/jwt"
+
+	"github.com/google/uuid"
 )
+
+func CreateId(acctype string) string {
+	// Create a new UUID
+	uuid := uuid.NewString()
+
+	if acctype == "Customer" {
+		return "1" + uuid
+	} else if acctype == "Company" {
+		return "2" + uuid
+	} else {
+		return ""
+	}
+
+	return uuid
+}
+
+func CreateProductId() string {
+	// Create a new UUID
+	uuid := uuid.NewString()
+	return "0" + uuid
+}
 
 func Login(email string, password string) string {
 	customerList := GetCustomers()
@@ -11,7 +34,7 @@ func Login(email string, password string) string {
 
 	for _, customer := range customerList {
 		if customer.Email == email && customer.Password == password {
-			customer.Token = tools.CreateTokenCustomer(customer)
+			customer.Token = jwt.CreateTokenCustomer(customer)
 			tk = customer.Token
 			UpdateCustomer(customer)
 			break

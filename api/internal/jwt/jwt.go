@@ -1,4 +1,4 @@
-package tools
+package jwt
 
 import (
 	"api/internal/models"

@@ -1,8 +1,8 @@
-package datamanager
+package dataManager
 
 import (
+	"api/internal/jwt"
 	"api/internal/models"
-	"api/tools"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -45,7 +45,7 @@ func UpdateCustomerPersonal(id string, name string, surname string, email string
 			customers[i].Email = email
 			customers[i].Password = password
 			tmp := customers[i]
-			customers[i].Token = tools.CreateTokenCustomer(tmp)
+			customers[i].Token = jwt.CreateTokenCustomer(tmp)
 			tk = customers[i].Token
 		}
 	}

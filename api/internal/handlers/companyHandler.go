@@ -2,9 +2,8 @@ package handlers
 
 import (
 	"api/internal/auth"
-	"api/internal/datamanager"
+	"api/internal/dataManager"
 	"api/internal/models"
-	"api/tools"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +29,7 @@ func CompanyPurchaseHistory(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
-		purchaseHistory := datamanager.GetCompanyPurchaseHistory(user.ID)
+		purchaseHistory := dataManager.GetCompanyPurchaseHistory(user.ID)
 		maps := map[string]interface{}{"message": "Success", "purchase_history": purchaseHistory}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))
@@ -73,7 +72,7 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &prd)
 	authValid := auth.Auth(prd.Token)
 	if authValid == true {
-		prd.ID = tools.CreateProductId()
+		prd.ID = dataManager.CreateProductId()
 		prd.CreatedAt = time.Now().String()
 		prd.Comments = []models.Comment{}
 
@@ -88,7 +87,7 @@ func CompanyAddProduct(w http.ResponseWriter, r *http.Request) {
 		p.Comments = prd.Comments
 		p.CreatedAt = prd.CreatedAt
 
-		datamanager.CompanyAddProduct(p)
+		dataManager.CompanyAddProduct(p)
 		maps := map[string]string{"message": "success"}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))
@@ -122,7 +121,7 @@ func CompanyProductBuy(w http.ResponseWriter, r *http.Request) {
 
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
-		datamanager.AddProductHistoryCompany(user.Product, user.ID)
+		dataManager.AddProductHistoryCompany(user.Product, user.ID)
 		maps := map[string]string{"message": "success"}
 		mapsJson, _ := json.Marshal(maps)
 		fmt.Fprintf(w, string(mapsJson))
@@ -155,7 +154,7 @@ func CompanyProductList(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyByte, &user)
 	authValid := auth.Auth(user.Token)
 	if authValid == true {
-		productList := datamanager.GetCompanyProductList(user.ID)
+		productList := dataManager.GetCompanyProductList(user.ID)
 		productListJSON, _ := json.Marshal(productList)
 		fmt.Fprintf(w, string(productListJSON))
 	} else {
