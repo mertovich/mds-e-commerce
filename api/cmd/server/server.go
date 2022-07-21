@@ -1,6 +1,7 @@
 package server
 
 import (
+	"api/internal/handlers"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 )
 
 func StartServer() {
+	handlers.HandlersRequest()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

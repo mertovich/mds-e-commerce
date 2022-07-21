@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"api/auth"
-	"api/datamanager"
-	"api/models"
+	"api/internal/auth"
+	"api/internal/datamanager"
+	"api/internal/models"
 	"api/tools"
 	"encoding/json"
 	"fmt"

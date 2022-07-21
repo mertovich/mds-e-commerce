@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"api/models"
+	"api/internal/models"
 	"fmt"
 	"time"
 

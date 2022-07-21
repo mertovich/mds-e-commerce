@@ -1,7 +1,7 @@
 package datamanager
 
 import (
-	"api/models"
+	"api/internal/models"
 	"encoding/json"
 	"io/ioutil"
 )

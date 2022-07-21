@@ -1,6 +1,8 @@
 package datamanager
 
-import "api/tools"
+import (
+	"api/tools"
+)
 
 func Login(email string, password string) string {
 	customerList := GetCustomers()

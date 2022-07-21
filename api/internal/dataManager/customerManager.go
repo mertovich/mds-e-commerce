@@ -1,7 +1,7 @@
 package datamanager
 
 import (
-	"api/models"
+	"api/internal/models"
 	"api/tools"
 	"encoding/json"
 	"io/ioutil"
@@ -55,8 +55,7 @@ func UpdateCustomerPersonal(id string, name string, surname string, email string
 	return tk
 }
 
-
-func GetCustomer (id string) models.Customer {
+func GetCustomer(id string) models.Customer {
 	customers := GetCustomers()
 	for _, customer := range customers {
 		if customer.ID == id {

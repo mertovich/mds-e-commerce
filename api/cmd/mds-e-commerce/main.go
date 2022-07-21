@@ -1,11 +1,9 @@
 package main
 
 import (
-	"api/routers"
-	"api/server"
+	"api/cmd/server"
 )
 
 func main() {
-	routers.Inıt()
 	server.StartServer()
 }

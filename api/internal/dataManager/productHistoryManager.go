@@ -1,6 +1,6 @@
 package datamanager
 
-import "api/models"
+import "api/internal/models"
 
 func AddProductHistoryCustomer(p []models.Product, id string) {
 	c := GetCustomer(id)

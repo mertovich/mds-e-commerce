@@ -1,6 +1,6 @@
 package auth
 
-import "api/datamanager"
+import "api/internal/datamanager"
 
 func Auth(token string) bool {
 	customerList := datamanager.GetCustomers()
