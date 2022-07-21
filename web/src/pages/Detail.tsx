@@ -76,13 +76,15 @@ const Detail = (props: Props) => {
     }
 
     const productBuy = (product: any) => {
+        let productList:any = []
+        productList.push(product)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 id: user.id,
                 token: localStorage.getItem('token'),
-                product: product
+                product: productList
             }),
         }
         fetch(`${config.api_url}/api/${userType}/product-buy`, requestOptions)
